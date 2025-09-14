@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "My Explorations with LLMs",
     "section": "",
-    "text": "Tokenization Laws and DNA Models\n\n\n\nLLMs\n\nbiology\n\ntokenization\n\n\n\nUnderstanding k-mer tokenization and EVO-2 style nucleotide modeling\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nInformation-Theoretic Bounds and Training Dynamics of Transformers\n\n\n\ntheory\n\ntransformers\n\ninformation-theory\n\n\n\nExplaining transformer training through entropy, cross-entropy, and bits-per-token\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nA test post\n\n\n\nLLMs\n\nprompting\n\nlogic\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nFeb 2, 2024\n\n\nAn LLM User\n\n\n\n\n\nNo matching items"
+    "text": "CUDA Inference Kernels and Serving Stacks\n\n\n\nsystems\n\ninference\n\ncuda\n\n\n\nKey kernels, memory layouts, and serving choices (with vLLM notes)\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nTokenization Laws and DNA Models\n\n\n\nLLMs\n\nbiology\n\ntokenization\n\n\n\nUnderstanding k-mer tokenization and EVO-2 style nucleotide modeling\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nInformation-Theoretic Bounds and Training Dynamics of Transformers\n\n\n\ntheory\n\ntransformers\n\ninformation-theory\n\n\n\nExplaining transformer training through entropy, cross-entropy, and bits-per-token\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nA test post\n\n\n\nLLMs\n\nprompting\n\nlogic\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nFeb 2, 2024\n\n\nAn LLM User\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/002_information_theory_transformers/index.html",
@@ -68,6 +68,27 @@
     "title": "Tokenization Laws and DNA Models",
     "section": "How EVO-2-style models use nucleotide tokens",
     "text": "How EVO-2-style models use nucleotide tokens\nHigh-level idea: - Use a tokenizer over nucleotides (e.g., 3–6-mer tokens) to convert sequences into discrete tokens. - Train an autoregressive transformer over these tokens to model genomic sequences. - Incorporate long-range context (e.g., thousands to millions of bases) using efficient attention or memory mechanisms. - Optionally multitask with masked objectives or structure-aware heads.\nThis lets the model learn motifs, regulatory patterns, and long-range interactions directly from token sequences."
+  },
+  {
+    "objectID": "posts/003_cuda_inference_kernels/index.html",
+    "href": "posts/003_cuda_inference_kernels/index.html",
+    "title": "CUDA Inference Kernels and Serving Stacks",
+    "section": "",
+    "text": "What makes LLM inference fast on GPUs? This post summarizes the core CUDA kernels, memory layouts, and scheduling tricks that dominate latency and throughput.\n\nAttention with KV cache (paged KV, continuous batch, block-sparse)\nGEMM-heavy layers (QKV projections, MLP) and tensor cores\nQuantization (weight-only, KV cache) and dequant overhead\nServing stacks (vLLM, TensorRT-LLM, Triton) and scheduling\n\n\n  \n  Figure 1. vLLM logo"
+  },
+  {
+    "objectID": "posts/003_cuda_inference_kernels/index.html#overview",
+    "href": "posts/003_cuda_inference_kernels/index.html#overview",
+    "title": "CUDA Inference Kernels and Serving Stacks",
+    "section": "",
+    "text": "What makes LLM inference fast on GPUs? This post summarizes the core CUDA kernels, memory layouts, and scheduling tricks that dominate latency and throughput.\n\nAttention with KV cache (paged KV, continuous batch, block-sparse)\nGEMM-heavy layers (QKV projections, MLP) and tensor cores\nQuantization (weight-only, KV cache) and dequant overhead\nServing stacks (vLLM, TensorRT-LLM, Triton) and scheduling\n\n\n  \n  Figure 1. vLLM logo"
+  },
+  {
+    "objectID": "posts/003_cuda_inference_kernels/index.html#kernel-hotspots",
+    "href": "posts/003_cuda_inference_kernels/index.html#kernel-hotspots",
+    "title": "CUDA Inference Kernels and Serving Stacks",
+    "section": "Kernel hotspots",
+    "text": "Kernel hotspots\n\nAttention: QK^T, softmax, and AV; fused kernels reduce memory traffic.\nKV cache: paging and swizzling to keep contiguous access; block tables.\nGEMM: QKV, output projection, MLP GEMMs dominate FLOPs; use tensor cores.\nQuant: weight-only (W8A16) vs. activation quant; KV cache quant (e.g., 8-bit) saves VRAM.\n\n\n# Simple throughput estimator\nfrom typing import Optional\n\ndef estimate_throughput(tokens_per_request: int,\n                        requests_per_second: float,\n                        decode_tokens_per_s: float,\n                        prefill_tokens_per_s: Optional[float] = None,\n                        prefill_tokens: int = 0) -&gt; float:\n    \"\"\"\n    Crude throughput estimate in tokens/sec.\n    - tokens_per_request: average generated tokens per request\n    - requests_per_second: steady-state request rate\n    - decode_tokens_per_s: steady-state decode speed (per token) across batch\n    - prefill_tokens_per_s: optional prefill speed; if None, ignored\n    - prefill_tokens: avg prompt tokens per request\n    \"\"\"\n    decode_toks = tokens_per_request * requests_per_second\n    total = decode_toks\n    if prefill_tokens_per_s is not None and prefill_tokens &gt; 0:\n        total += (prefill_tokens * requests_per_second) * (prefill_tokens_per_s / decode_tokens_per_s)\n    return total\n\nprint(estimate_throughput(tokens_per_request=200,\n                          requests_per_second=5.0,\n                          decode_tokens_per_s=200000.0,\n                          prefill_tokens_per_s=1200000.0,\n                          prefill_tokens=1000))"
   },
   {
     "objectID": "posts/000_test_post/index.html",
