@@ -4,7 +4,84 @@
     "href": "index.html",
     "title": "My Explorations with LLMs",
     "section": "",
-    "text": "A test post\n\n\n\nLLMs\n\nprompting\n\nlogic\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nFeb 2, 2024\n\n\nAn LLM User\n\n\n\n\n\nNo matching items"
+    "text": "Tokenization Laws and DNA Models\n\n\n\nLLMs\n\nbiology\n\ntokenization\n\n\n\nUnderstanding k-mer tokenization and EVO-2 style nucleotide modeling\n\n\n\n\n\nSep 14, 2025\n\n\nYour Name\n\n\n\n\n\n\n\n\n\n\n\n\nInformation-Theoretic Bounds and Training Dynamics of Transformers\n\n\n\ntheory\n\ntransformers\n\ninformation-theory\n\n\n\nExplaining transformer training through entropy, cross-entropy, and bits-per-token\n\n\n\n\n\nSep 14, 2025\n\n\nYour Name\n\n\n\n\n\n\n\n\n\n\n\n\nA test post\n\n\n\nLLMs\n\nprompting\n\nlogic\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nFeb 2, 2024\n\n\nAn LLM User\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/002_information_theory_transformers/index.html",
+    "href": "posts/002_information_theory_transformers/index.html",
+    "title": "Information-Theoretic Bounds and Training Dynamics of Transformers",
+    "section": "",
+    "text": "This post sketches how training a transformer can be framed in information-theoretic terms:\n\nTraining minimizes empirical cross-entropy, i.e., expected negative log-likelihood.\nThe optimal achievable loss is the entropy rate of the data (given the model class).\nBits-per-token (bpt) is simply loss in base-2 units.\nGeneralization can be discussed via compression and mutual information."
+  },
+  {
+    "objectID": "posts/002_information_theory_transformers/index.html#overview",
+    "href": "posts/002_information_theory_transformers/index.html#overview",
+    "title": "Information-Theoretic Bounds and Training Dynamics of Transformers",
+    "section": "",
+    "text": "This post sketches how training a transformer can be framed in information-theoretic terms:\n\nTraining minimizes empirical cross-entropy, i.e., expected negative log-likelihood.\nThe optimal achievable loss is the entropy rate of the data (given the model class).\nBits-per-token (bpt) is simply loss in base-2 units.\nGeneralization can be discussed via compression and mutual information."
+  },
+  {
+    "objectID": "posts/002_information_theory_transformers/index.html#image-placeholder",
+    "href": "posts/002_information_theory_transformers/index.html#image-placeholder",
+    "title": "Information-Theoretic Bounds and Training Dynamics of Transformers",
+    "section": "Image placeholder",
+    "text": "Image placeholder\nAdd your figure here. Replace the path once you upload the image file into this folder.\n\n  \n  Figure 1. Placeholder for information-theoretic diagram. Replace with your actual image file."
+  },
+  {
+    "objectID": "posts/002_information_theory_transformers/index.html#cross-entropy-entropy-rate-and-bits-per-token",
+    "href": "posts/002_information_theory_transformers/index.html#cross-entropy-entropy-rate-and-bits-per-token",
+    "title": "Information-Theoretic Bounds and Training Dynamics of Transformers",
+    "section": "Cross-entropy, entropy rate, and bits-per-token",
+    "text": "Cross-entropy, entropy rate, and bits-per-token\n\nCross-entropy (training loss) estimates how many nats per token the model spends to encode the data.\nBits-per-token (bpt) is just loss in base-2: bpt = loss_nat / ln 2.\nThe theoretical lower bound is the entropy rate H of the data-generating process; if the model class is misspecified, the optimum is H + D(P||Q*).\n\n\n# Convert loss (nats/token) to bits-per-token and perplexity\nimport math\nfrom typing import Iterable, Tuple\n\n\ndef loss_to_metrics(loss_nats: float) -&gt; Tuple[float, float]:\n    \"\"\"Return (bits_per_token, perplexity) from loss in nats/token.\"\"\"\n    bits_per_token = loss_nats / math.log(2)\n    perplexity = math.exp(loss_nats)\n    return bits_per_token, perplexity\n\n\nexample_losses = [3.5, 2.8, 2.2, 1.9]\nfor step, loss in enumerate(example_losses, start=1):\n    bpt, ppl = loss_to_metrics(loss)\n    print(f\"step={step:02d} loss={loss:.3f} nats -&gt; bpt={bpt:.3f}, ppl={ppl:.2f}\")"
+  },
+  {
+    "objectID": "posts/002_information_theory_transformers/index.html#training-dynamics-as-compression",
+    "href": "posts/002_information_theory_transformers/index.html#training-dynamics-as-compression",
+    "title": "Information-Theoretic Bounds and Training Dynamics of Transformers",
+    "section": "Training dynamics as compression",
+    "text": "Training dynamics as compression\n\nMinimizing cross-entropy is equivalent to minimizing expected code length.\nEarly training reduces redundant predictability (frequent patterns); later, model learns rarer structure.\nCapacity vs. data curve: more parameters lower achievable cross-entropy until compute/data bottlenecks.\nGeneralization: MDL view—good models compress both train and test data with similar code lengths."
+  },
+  {
+    "objectID": "posts/001_tokenization_dna_models/index.html",
+    "href": "posts/001_tokenization_dna_models/index.html",
+    "title": "Tokenization Laws and DNA Models",
+    "section": "",
+    "text": "This post explores how tokenization choices shape model capacity and performance, and how those ideas translate to DNA models. We’ll use k-mer tokenization on nucleotide sequences and discuss how EVO-2-style models work with nucleotide tokens.\n\nWhat are tokenization laws?\nHow do k-mer vocabularies trade off context length vs. vocabulary size?\nHow might EVO-2-like models represent nucleotides and long-range dependencies?"
+  },
+  {
+    "objectID": "posts/001_tokenization_dna_models/index.html#overview",
+    "href": "posts/001_tokenization_dna_models/index.html#overview",
+    "title": "Tokenization Laws and DNA Models",
+    "section": "",
+    "text": "This post explores how tokenization choices shape model capacity and performance, and how those ideas translate to DNA models. We’ll use k-mer tokenization on nucleotide sequences and discuss how EVO-2-style models work with nucleotide tokens.\n\nWhat are tokenization laws?\nHow do k-mer vocabularies trade off context length vs. vocabulary size?\nHow might EVO-2-like models represent nucleotides and long-range dependencies?"
+  },
+  {
+    "objectID": "posts/001_tokenization_dna_models/index.html#evo-2-image-placeholder",
+    "href": "posts/001_tokenization_dna_models/index.html#evo-2-image-placeholder",
+    "title": "Tokenization Laws and DNA Models",
+    "section": "EVO-2 image placeholder",
+    "text": "EVO-2 image placeholder\nAdd your EVO-2 figure here. Replace the path once you upload the image file into this folder.\n\n  \n  Figure 1. EVO-2 model placeholder. Replace with your actual image file."
+  },
+  {
+    "objectID": "posts/001_tokenization_dna_models/index.html#tokenization-laws-in-brief",
+    "href": "posts/001_tokenization_dna_models/index.html#tokenization-laws-in-brief",
+    "title": "Tokenization Laws and DNA Models",
+    "section": "Tokenization laws in brief",
+    "text": "Tokenization laws in brief\nTokenization laws describe empirical tradeoffs between model size, context length, and tokenizer vocabulary. For fixed compute, larger vocabularies shrink sequence length but increase embedding/softmax cost; smaller vocabularies do the opposite. The optimal point depends on data distribution and task (e.g., code vs. natural language vs. DNA)."
+  },
+  {
+    "objectID": "posts/001_tokenization_dna_models/index.html#dna-modeling-with-k-mers",
+    "href": "posts/001_tokenization_dna_models/index.html#dna-modeling-with-k-mers",
+    "title": "Tokenization Laws and DNA Models",
+    "section": "DNA modeling with k-mers",
+    "text": "DNA modeling with k-mers\nFor DNA, a common tokenizer uses k-mers over the alphabet {A,C,G,T}. The vocabulary size is 4^k, and the stride determines overlap. Larger k compresses sequences but grows the vocab; smaller k expands sequences but keeps vocab small.\n\nExample: k=3 (3-mers) ⇒ vocab size = 64\nExample: k=6 (6-mers) ⇒ vocab size = 4096\n\nWe can quickly demonstrate 3-mer tokenization with stride 1.\n\n# Simple 3-mer tokenizer demo\nfrom collections import Counter\nfrom typing import List\n\n\ndef kmers(sequence: str, k: int = 3, stride: int = 1) -&gt; List[str]:\n    sequence = sequence.upper().replace(\"U\", \"T\")\n    tokens = []\n    for i in range(0, len(sequence) - k + 1, stride):\n        kmer = sequence[i:i+k]\n        if set(kmer) &lt;= {\"A\", \"C\", \"G\", \"T\"}:\n            tokens.append(kmer)\n    return tokens\n\n\nseq = \"ACGTACGTGACCT\"\nks = kmers(seq, k=3, stride=1)\nprint(\"Sequence:\", seq)\nprint(\"3-mers:\", ks)\nprint(\"Unique 3-mers:\", sorted(set(ks)))\nprint(\"Counts:\", Counter(ks))"
+  },
+  {
+    "objectID": "posts/001_tokenization_dna_models/index.html#how-evo-2-style-models-use-nucleotide-tokens",
+    "href": "posts/001_tokenization_dna_models/index.html#how-evo-2-style-models-use-nucleotide-tokens",
+    "title": "Tokenization Laws and DNA Models",
+    "section": "How EVO-2-style models use nucleotide tokens",
+    "text": "How EVO-2-style models use nucleotide tokens\nHigh-level idea: - Use a tokenizer over nucleotides (e.g., 3–6-mer tokens) to convert sequences into discrete tokens. - Train an autoregressive transformer over these tokens to model genomic sequences. - Incorporate long-range context (e.g., thousands to millions of bases) using efficient attention or memory mechanisms. - Optionally multitask with masked objectives or structure-aware heads.\nThis lets the model learn motifs, regulatory patterns, and long-range interactions directly from token sequences."
   },
   {
     "objectID": "posts/000_test_post/index.html",
