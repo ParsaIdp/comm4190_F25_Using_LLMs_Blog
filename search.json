@@ -11,21 +11,14 @@
     "href": "posts/002_information_theory_transformers/index.html",
     "title": "Information-Theoretic Bounds and Training Dynamics of Transformers",
     "section": "",
-    "text": "This post sketches how training a transformer can be framed in information-theoretic terms:\n\nTraining minimizes empirical cross-entropy, i.e., expected negative log-likelihood.\nThe optimal achievable loss is the entropy rate of the data (given the model class).\nBits-per-token (bpt) is simply loss in base-2 units.\nGeneralization can be discussed via compression and mutual information."
+    "text": "This post sketches how training a transformer can be framed in information-theoretic terms:\n\nTraining minimizes empirical cross-entropy, i.e., expected negative log-likelihood.\nThe optimal achievable loss is the entropy rate of the data (given the model class).\nBits-per-token (bpt) is simply loss in base-2 units.\nGeneralization can be discussed via compression and mutual information.\n\n\n  \n  Figure 1. Transformers"
   },
   {
     "objectID": "posts/002_information_theory_transformers/index.html#overview",
     "href": "posts/002_information_theory_transformers/index.html#overview",
     "title": "Information-Theoretic Bounds and Training Dynamics of Transformers",
     "section": "",
-    "text": "This post sketches how training a transformer can be framed in information-theoretic terms:\n\nTraining minimizes empirical cross-entropy, i.e., expected negative log-likelihood.\nThe optimal achievable loss is the entropy rate of the data (given the model class).\nBits-per-token (bpt) is simply loss in base-2 units.\nGeneralization can be discussed via compression and mutual information."
-  },
-  {
-    "objectID": "posts/002_information_theory_transformers/index.html#image-placeholder",
-    "href": "posts/002_information_theory_transformers/index.html#image-placeholder",
-    "title": "Information-Theoretic Bounds and Training Dynamics of Transformers",
-    "section": "Image placeholder",
-    "text": "Image placeholder\nAdd your figure here. Replace the path once you upload the image file into this folder.\n\n  \n  Figure 1. Transformers"
+    "text": "This post sketches how training a transformer can be framed in information-theoretic terms:\n\nTraining minimizes empirical cross-entropy, i.e., expected negative log-likelihood.\nThe optimal achievable loss is the entropy rate of the data (given the model class).\nBits-per-token (bpt) is simply loss in base-2 units.\nGeneralization can be discussed via compression and mutual information.\n\n\n  \n  Figure 1. Transformers"
   },
   {
     "objectID": "posts/002_information_theory_transformers/index.html#cross-entropy-entropy-rate-and-bits-per-token",
