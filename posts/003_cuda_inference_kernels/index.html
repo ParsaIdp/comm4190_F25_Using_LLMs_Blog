@@ -252,6 +252,85 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                          prefill_tokens_per_s<span class="op">=</span><span class="fl">1200000.0</span>,</span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                          prefill_tokens<span class="op">=</span><span class="dv">1000</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="vllm-vs-tensorrt-llm-vs-triton-high-level" class="level2">
+<h2 class="anchored" data-anchor-id="vllm-vs-tensorrt-llm-vs-triton-high-level">vLLM vs TensorRT-LLM vs Triton (high level)</h2>
+<ul>
+<li>vLLM: Continuous batching, paged KV cache, flexible Python API; great for dynamic workloads; supports multi-model serving.</li>
+<li>TensorRT-LLM: Highly optimized CUDA/TensorRT kernels, graph capture, INT8/FP8 pipelines; excels on NVIDIA stacks for max perf.</li>
+<li>Triton (NVIDIA inference server): Orchestrates models/runtimes (can host vLLM or TensorRT-LLM backends), handles deployment/HTTP/gRPC/metrics.</li>
+</ul>
+<p>Rule of thumb: For maximum single-GPU perf and static graphs, TensorRT-LLM can edge out; for dynamic batching/multitenancy ease, vLLM is excellent; Triton adds production serving features.</p>
+</section>
+<section id="kv-cache-sizing-and-paging" class="level2">
+<h2 class="anchored" data-anchor-id="kv-cache-sizing-and-paging">KV cache sizing and paging</h2>
+<ul>
+<li>KV size per token ≈ 2 * num_layers * num_heads * head_dim * dtype_bytes.</li>
+<li>Multiply by max sequence length and batch to estimate worst-case VRAM.</li>
+<li>Paged KV: allocate in fixed-size blocks (e.g., 16/32/64 tokens) and map logical positions → physical pages; reduces fragmentation and enables efficient eviction.</li>
+<li>Swizzling/contiguous layout within blocks keeps memory coalesced for attention reads.</li>
+</ul>
+<div id="cell-7" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># KV cache memory estimator (bytes)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>dtype_sizes <span class="op">=</span> {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fp16"</span>: <span class="dv">2</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bf16"</span>: <span class="dv">2</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fp32"</span>: <span class="dv">4</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"int8"</span>: <span class="dv">1</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kv_cache_bytes(num_layers: <span class="bu">int</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                   num_heads: <span class="bu">int</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                   head_dim: <span class="bu">int</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                   seq_len: <span class="bu">int</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                   batch_size: <span class="bu">int</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                   dtype: Literal[<span class="st">"fp16"</span>, <span class="st">"bf16"</span>, <span class="st">"fp32"</span>, <span class="st">"int8"</span>] <span class="op">=</span> <span class="st">"fp16"</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    per_token <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> num_layers <span class="op">*</span> num_heads <span class="op">*</span> head_dim <span class="op">*</span> dtype_sizes[dtype]</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    total_tokens <span class="op">=</span> seq_len <span class="op">*</span> batch_size</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> per_token <span class="op">*</span> total_tokens</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: 32 layers, 32 heads, 128 dim, seq 4k, batch 16, fp16</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kv_cache_bytes(<span class="dv">32</span>, <span class="dv">32</span>, <span class="dv">128</span>, <span class="dv">4096</span>, <span class="dv">16</span>, <span class="st">"fp16"</span>) <span class="op">/</span> (<span class="dv">1024</span><span class="op">**</span><span class="dv">3</span>), <span class="st">"GiB"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="batching-and-scheduling" class="level2">
+<h2 class="anchored" data-anchor-id="batching-and-scheduling">Batching and scheduling</h2>
+<ul>
+<li>Continuous batching: backfill finished sequences to keep kernels busy; great for variable-length requests.</li>
+<li>Short-first / length-aware: schedule shorter jobs to reduce tail latency; mix for throughput.</li>
+<li>Spec decode: trade compute for fewer steps; helps throughput if memory is ample.</li>
+<li>Pinned memory and overlap: overlap H2D/D2H copies with compute using streams.</li>
+</ul>
+</section>
+<section id="kernel-level-optimization-details" class="level2">
+<h2 class="anchored" data-anchor-id="kernel-level-optimization-details">Kernel-level optimization details</h2>
+<ul>
+<li>Fused attention: fuse QK^T, scaling, softmax, and AV to reduce DRAM round-trips.</li>
+<li>FlashAttention-style tiling: block SRAM tiles to keep on-chip; minimize global reads/writes.</li>
+<li>Layouts: use row/col-major consistent with GEMM kernels; prefer tensor core-friendly shapes (multiple of 8/16).</li>
+<li>Persistent kernels: reduce launch overhead; good for steady-state decode.</li>
+<li>Quant &amp; dequant fusion: fuse dequant→GEMM to avoid bandwidth blowups.</li>
+</ul>
+</section>
+<section id="system-level-tips" class="level2">
+<h2 class="anchored" data-anchor-id="system-level-tips">System-level tips</h2>
+<ul>
+<li>CUDA graphs: capture steady decode loop to reduce CPU overhead.</li>
+<li>Streams: separate prefill, decode, and IO with stream priorities.</li>
+<li>NUMA &amp; pinning: pin host buffers and align worker affinity to avoid cross-socket traffic.</li>
+<li>Overlap: prefetch next batch to GPU while decoding current tokens.</li>
+</ul>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li>vLLM docs and papers (continuous batching, paged KV)</li>
+<li>TensorRT-LLM samples and perf guides</li>
+<li>FlashAttention papers and kernels</li>
+<li>NVIDIA Triton Inference Server docs</li>
+</ul>
 
 
 </section>

@@ -91,6 +91,48 @@
     "text": "Kernel hotspots\n\nAttention: QK^T, softmax, and AV; fused kernels reduce memory traffic.\nKV cache: paging and swizzling to keep contiguous access; block tables.\nGEMM: QKV, output projection, MLP GEMMs dominate FLOPs; use tensor cores.\nQuant: weight-only (W8A16) vs. activation quant; KV cache quant (e.g., 8-bit) saves VRAM.\n\n\n# Simple throughput estimator\nfrom typing import Optional\n\ndef estimate_throughput(tokens_per_request: int,\n                        requests_per_second: float,\n                        decode_tokens_per_s: float,\n                        prefill_tokens_per_s: Optional[float] = None,\n                        prefill_tokens: int = 0) -&gt; float:\n    \"\"\"\n    Crude throughput estimate in tokens/sec.\n    - tokens_per_request: average generated tokens per request\n    - requests_per_second: steady-state request rate\n    - decode_tokens_per_s: steady-state decode speed (per token) across batch\n    - prefill_tokens_per_s: optional prefill speed; if None, ignored\n    - prefill_tokens: avg prompt tokens per request\n    \"\"\"\n    decode_toks = tokens_per_request * requests_per_second\n    total = decode_toks\n    if prefill_tokens_per_s is not None and prefill_tokens &gt; 0:\n        total += (prefill_tokens * requests_per_second) * (prefill_tokens_per_s / decode_tokens_per_s)\n    return total\n\nprint(estimate_throughput(tokens_per_request=200,\n                          requests_per_second=5.0,\n                          decode_tokens_per_s=200000.0,\n                          prefill_tokens_per_s=1200000.0,\n                          prefill_tokens=1000))"
   },
   {
+    "objectID": "posts/003_cuda_inference_kernels/index.html#vllm-vs-tensorrt-llm-vs-triton-high-level",
+    "href": "posts/003_cuda_inference_kernels/index.html#vllm-vs-tensorrt-llm-vs-triton-high-level",
+    "title": "CUDA Inference Kernels and Serving Stacks",
+    "section": "vLLM vs TensorRT-LLM vs Triton (high level)",
+    "text": "vLLM vs TensorRT-LLM vs Triton (high level)\n\nvLLM: Continuous batching, paged KV cache, flexible Python API; great for dynamic workloads; supports multi-model serving.\nTensorRT-LLM: Highly optimized CUDA/TensorRT kernels, graph capture, INT8/FP8 pipelines; excels on NVIDIA stacks for max perf.\nTriton (NVIDIA inference server): Orchestrates models/runtimes (can host vLLM or TensorRT-LLM backends), handles deployment/HTTP/gRPC/metrics.\n\nRule of thumb: For maximum single-GPU perf and static graphs, TensorRT-LLM can edge out; for dynamic batching/multitenancy ease, vLLM is excellent; Triton adds production serving features."
+  },
+  {
+    "objectID": "posts/003_cuda_inference_kernels/index.html#kv-cache-sizing-and-paging",
+    "href": "posts/003_cuda_inference_kernels/index.html#kv-cache-sizing-and-paging",
+    "title": "CUDA Inference Kernels and Serving Stacks",
+    "section": "KV cache sizing and paging",
+    "text": "KV cache sizing and paging\n\nKV size per token ≈ 2 * num_layers * num_heads * head_dim * dtype_bytes.\nMultiply by max sequence length and batch to estimate worst-case VRAM.\nPaged KV: allocate in fixed-size blocks (e.g., 16/32/64 tokens) and map logical positions → physical pages; reduces fragmentation and enables efficient eviction.\nSwizzling/contiguous layout within blocks keeps memory coalesced for attention reads.\n\n\n# KV cache memory estimator (bytes)\nfrom typing import Literal\n\ndtype_sizes = {\n    \"fp16\": 2,\n    \"bf16\": 2,\n    \"fp32\": 4,\n    \"int8\": 1,\n}\n\ndef kv_cache_bytes(num_layers: int,\n                   num_heads: int,\n                   head_dim: int,\n                   seq_len: int,\n                   batch_size: int,\n                   dtype: Literal[\"fp16\", \"bf16\", \"fp32\", \"int8\"] = \"fp16\") -&gt; int:\n    per_token = 2 * num_layers * num_heads * head_dim * dtype_sizes[dtype]\n    total_tokens = seq_len * batch_size\n    return per_token * total_tokens\n\n# Example: 32 layers, 32 heads, 128 dim, seq 4k, batch 16, fp16\nprint(kv_cache_bytes(32, 32, 128, 4096, 16, \"fp16\") / (1024**3), \"GiB\")"
+  },
+  {
+    "objectID": "posts/003_cuda_inference_kernels/index.html#batching-and-scheduling",
+    "href": "posts/003_cuda_inference_kernels/index.html#batching-and-scheduling",
+    "title": "CUDA Inference Kernels and Serving Stacks",
+    "section": "Batching and scheduling",
+    "text": "Batching and scheduling\n\nContinuous batching: backfill finished sequences to keep kernels busy; great for variable-length requests.\nShort-first / length-aware: schedule shorter jobs to reduce tail latency; mix for throughput.\nSpec decode: trade compute for fewer steps; helps throughput if memory is ample.\nPinned memory and overlap: overlap H2D/D2H copies with compute using streams."
+  },
+  {
+    "objectID": "posts/003_cuda_inference_kernels/index.html#kernel-level-optimization-details",
+    "href": "posts/003_cuda_inference_kernels/index.html#kernel-level-optimization-details",
+    "title": "CUDA Inference Kernels and Serving Stacks",
+    "section": "Kernel-level optimization details",
+    "text": "Kernel-level optimization details\n\nFused attention: fuse QK^T, scaling, softmax, and AV to reduce DRAM round-trips.\nFlashAttention-style tiling: block SRAM tiles to keep on-chip; minimize global reads/writes.\nLayouts: use row/col-major consistent with GEMM kernels; prefer tensor core-friendly shapes (multiple of 8/16).\nPersistent kernels: reduce launch overhead; good for steady-state decode.\nQuant & dequant fusion: fuse dequant→GEMM to avoid bandwidth blowups."
+  },
+  {
+    "objectID": "posts/003_cuda_inference_kernels/index.html#system-level-tips",
+    "href": "posts/003_cuda_inference_kernels/index.html#system-level-tips",
+    "title": "CUDA Inference Kernels and Serving Stacks",
+    "section": "System-level tips",
+    "text": "System-level tips\n\nCUDA graphs: capture steady decode loop to reduce CPU overhead.\nStreams: separate prefill, decode, and IO with stream priorities.\nNUMA & pinning: pin host buffers and align worker affinity to avoid cross-socket traffic.\nOverlap: prefetch next batch to GPU while decoding current tokens."
+  },
+  {
+    "objectID": "posts/003_cuda_inference_kernels/index.html#references",
+    "href": "posts/003_cuda_inference_kernels/index.html#references",
+    "title": "CUDA Inference Kernels and Serving Stacks",
+    "section": "References",
+    "text": "References\n\nvLLM docs and papers (continuous batching, paged KV)\nTensorRT-LLM samples and perf guides\nFlashAttention papers and kernels\nNVIDIA Triton Inference Server docs"
+  },
+  {
     "objectID": "posts/000_test_post/index.html",
     "href": "posts/000_test_post/index.html",
     "title": "A test post",
