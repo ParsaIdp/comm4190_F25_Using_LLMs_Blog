@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "My Explorations with LLMs",
     "section": "",
-    "text": "Tokenization Laws and DNA Models\n\n\n\nLLMs\n\nbiology\n\ntokenization\n\n\n\nUnderstanding k-mer tokenization and EVO-2 style nucleotide modeling\n\n\n\n\n\nSep 14, 2025\n\n\nYour Name\n\n\n\n\n\n\n\n\n\n\n\n\nInformation-Theoretic Bounds and Training Dynamics of Transformers\n\n\n\ntheory\n\ntransformers\n\ninformation-theory\n\n\n\nExplaining transformer training through entropy, cross-entropy, and bits-per-token\n\n\n\n\n\nSep 14, 2025\n\n\nYour Name\n\n\n\n\n\n\n\n\n\n\n\n\nA test post\n\n\n\nLLMs\n\nprompting\n\nlogic\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nFeb 2, 2024\n\n\nAn LLM User\n\n\n\n\n\nNo matching items"
+    "text": "Tokenization Laws and DNA Models\n\n\n\nLLMs\n\nbiology\n\ntokenization\n\n\n\nUnderstanding k-mer tokenization and EVO-2 style nucleotide modeling\n\n\n\n\n\nSep 14, 2025\n\n\nYour Name\n\n\n\n\n\n\n\n\n\n\n\n\nInformation-Theoretic Bounds and Training Dynamics of Transformers\n\n\n\ntheory\n\ntransformers\n\ninformation-theory\n\n\n\nExplaining transformer training through entropy, cross-entropy, and bits-per-token\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nA test post\n\n\n\nLLMs\n\nprompting\n\nlogic\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nFeb 2, 2024\n\n\nAn LLM User\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/002_information_theory_transformers/index.html",
@@ -25,7 +25,7 @@
     "href": "posts/002_information_theory_transformers/index.html#image-placeholder",
     "title": "Information-Theoretic Bounds and Training Dynamics of Transformers",
     "section": "Image placeholder",
-    "text": "Image placeholder\nAdd your figure here. Replace the path once you upload the image file into this folder.\n\n  \n  Figure 1. Placeholder for information-theoretic diagram. Replace with your actual image file."
+    "text": "Image placeholder\nAdd your figure here. Replace the path once you upload the image file into this folder.\n\n  \n  Figure 1. Transformers"
   },
   {
     "objectID": "posts/002_information_theory_transformers/index.html#cross-entropy-entropy-rate-and-bits-per-token",
@@ -60,7 +60,7 @@
     "href": "posts/001_tokenization_dna_models/index.html#evo-2-image-placeholder",
     "title": "Tokenization Laws and DNA Models",
     "section": "EVO-2 image placeholder",
-    "text": "EVO-2 image placeholder\nAdd your EVO-2 figure here. Replace the path once you upload the image file into this folder.\n\n  \n  Figure 1. EVO-2 model placeholder. Replace with your actual image file."
+    "text": "EVO-2 image placeholder\nAdd your EVO-2 figure here. Replace the path once you upload the image file into this folder.\n\n  \n  Figure 1. EVO-2 model."
   },
   {
     "objectID": "posts/001_tokenization_dna_models/index.html#tokenization-laws-in-brief",
