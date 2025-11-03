@@ -39,56 +39,56 @@
     "href": "posts/004_tokenizers/index.html",
     "title": "Tokenization Exploration",
     "section": "",
-    "text": "I explored tokenization with LLMs (GPT‑5 and Sonnet 4.5) and provide feedback on a peer’s prompting strategy. I analyze effectiveness, cross‑model checks, improvements, and why outcomes were expected/unexpected based on class concepts.\n\nEvidence base: two chats exploring Discrete Fourier Transform (DFT), tokenizer design, and “better than BPE” ideas.\nDeliverable: A direct URL to my feedback on the issues page (added below when posted)."
+    "text": "I explored tokenization with two models (GPT‑5 and Sonnet 4.5) and reflected on what made the prompts effective. The discussion moved from DFT basics to whether a Fourier transform could serve as a tokenizer, then broadened into ways to improve on BPE and how to tailor a tokenizer to a specific corpus. A direct URL to my feedback will be added when it’s posted on the issues page."
   },
   {
-    "objectID": "posts/004_tokenizers/index.html#context-and-assignment",
-    "href": "posts/004_tokenizers/index.html#context-and-assignment",
+    "objectID": "posts/004_tokenizers/index.html#context",
+    "href": "posts/004_tokenizers/index.html#context",
     "title": "Tokenization Exploration",
     "section": "",
-    "text": "I explored tokenization with LLMs (GPT‑5 and Sonnet 4.5) and provide feedback on a peer’s prompting strategy. I analyze effectiveness, cross‑model checks, improvements, and why outcomes were expected/unexpected based on class concepts.\n\nEvidence base: two chats exploring Discrete Fourier Transform (DFT), tokenizer design, and “better than BPE” ideas.\nDeliverable: A direct URL to my feedback on the issues page (added below when posted)."
+    "text": "I explored tokenization with two models (GPT‑5 and Sonnet 4.5) and reflected on what made the prompts effective. The discussion moved from DFT basics to whether a Fourier transform could serve as a tokenizer, then broadened into ways to improve on BPE and how to tailor a tokenizer to a specific corpus. A direct URL to my feedback will be added when it’s posted on the issues page."
   },
   {
-    "objectID": "posts/004_tokenizers/index.html#what-the-interactions-showed-summary",
-    "href": "posts/004_tokenizers/index.html#what-the-interactions-showed-summary",
+    "objectID": "posts/004_tokenizers/index.html#what-the-interactions-showed",
+    "href": "posts/004_tokenizers/index.html#what-the-interactions-showed",
     "title": "Tokenization Exploration",
-    "section": "What the interactions showed (summary)",
-    "text": "What the interactions showed (summary)\n\nDFT knowledge: The model stated standard DFT/IDFT formulas, properties, FFT relation, and practical notes — expected for a strong general model.\nTokenizer idea critique: It argued a plain DFT isn’t a practical tokenizer for text (losslessness, semantics, variable length), but suggested Fourier inside models and feature augmentations — aligned with class emphasis on data‑model match.\nNovel tokenizer directions: Proposed learned/VQ tokenizers, morphology‑aware hybrids, adaptive tokenizers, information‑theoretic/MDL objectives, and graph/semantic clustering — consistent with “optimize for predictability, not just compression”."
+    "section": "What the interactions showed",
+    "text": "What the interactions showed\nBoth models handled the DFT prompt comfortably, giving standard forward/inverse formulas and practical notes. When I asked if a DFT could be used as a tokenizer, the answers pushed back: a plain Fourier representation is lossy, fixed‑length, and not aligned to discrete linguistic structure; it’s better used inside the model or as auxiliary features. On “better than BPE,” the conversation shifted to learned tokenizers (e.g., VQ with byte fallback), morphology‑aware segmentation, adaptive/MDL‑motivated tokenization, and semantic or graph‑based grouping—approaches that target predictability rather than just compression."
   },
   {
-    "objectID": "posts/004_tokenizers/index.html#did-they-prompt-different-models-and-check-multiple-outputs",
-    "href": "posts/004_tokenizers/index.html#did-they-prompt-different-models-and-check-multiple-outputs",
+    "objectID": "posts/004_tokenizers/index.html#models-and-outputs",
+    "href": "posts/004_tokenizers/index.html#models-and-outputs",
     "title": "Tokenization Exploration",
-    "section": "Did they prompt different models and check multiple outputs?",
-    "text": "Did they prompt different models and check multiple outputs?\n\nYes — two separate model families were engaged (GPT‑5 and Sonnet 4.5). This is good practice for triangulation.\nMultiple outputs/checks: The threads iterate across related questions (DFT → tokenizer feasibility → alternatives), eliciting deeper reasoning rather than one‑shot answers. This aligns with our class guidance to sample more than once and compare."
+    "section": "Models and outputs",
+    "text": "Models and outputs\nI used two different model families (GPT‑5 and Sonnet 4.5) and iterated across related prompts rather than stopping at one answer. That back‑and‑forth surfaced consensus on basics, clearer reasoning about feasibility, and a pathway from critique to concrete designs."
   },
   {
-    "objectID": "posts/004_tokenizers/index.html#what-i-asked-conversation-excerpts",
-    "href": "posts/004_tokenizers/index.html#what-i-asked-conversation-excerpts",
+    "objectID": "posts/004_tokenizers/index.html#conversation-excerpts",
+    "href": "posts/004_tokenizers/index.html#conversation-excerpts",
     "title": "Tokenization Exploration",
-    "section": "What I asked (conversation excerpts)",
-    "text": "What I asked (conversation excerpts)\n\nDFT basics: “do you know discrete Fourier transform?” → requested definitions and properties.\nTokenizer feasibility: “imagine we want to use this as tokenizer to LLMs… is that possible?”\nBeyond BPE: “what are some plausible ways to tokenize better than BPE… novel ideas?”\nTailored tokenizer: “make a tokenizer that can be tailored to your data.”\n\n\nKey thread: DFT as tokenizer → critique → alternatives (learned/VQ, morphology, adaptive/MDL) → concrete design for a data‑tailorable tokenizer."
+    "section": "Conversation excerpts",
+    "text": "Conversation excerpts\nI began with a simple check: “do you know discrete Fourier transform?” The reply included the standard definition — “X[k] = Σ x[n] e^(−j2πkn/N), with an inverse x[n] = (1/N) Σ X[k] e^(+j2πkn/N)” — and reminders about linearity, modulation, and the FFT. From there I asked: “imagine we want to use this as tokenizer to LLMs… is that possible?” The answer argued a plain DFT is a poor tokenizer because it’s lossy, tied to fixed lengths, and not aligned to discrete symbols; it suggested using Fourier features inside models instead. Finally, I asked for alternatives “better than BPE” and a tokenizer that can be tailored to data; the response proposed learned VQ schemes with a byte‑fallback for exact reversibility, morphology‑aware segmentation, adaptive tokenization optimized for predictability, and semantic/graph‑based grouping."
   },
   {
-    "objectID": "posts/004_tokenizers/index.html#prompting-effectiveness-what-worked",
-    "href": "posts/004_tokenizers/index.html#prompting-effectiveness-what-worked",
+    "objectID": "posts/004_tokenizers/index.html#what-worked-in-the-prompting",
+    "href": "posts/004_tokenizers/index.html#what-worked-in-the-prompting",
     "title": "Tokenization Exploration",
-    "section": "Prompting effectiveness: what worked",
-    "text": "Prompting effectiveness: what worked\n\nMulti‑model triangulation: Comparing GPT‑5 and Sonnet 4.5 surfaced consensus (DFT basics) and nuance (tokenizer feasibility).\nIterative deepening: Follow‑ups moved from definition → feasibility → design alternatives → concrete architecture. This reduced surface‑level answers.\nSpecific, evaluable asks: Requests for “novel ideas” and “tailorable tokenizer” elicited structured proposals (VQ, morphology, adaptive/MDL).\nTying to data: Pushing for “according‑to‑data” grounded the discussion in invertibility, lossless paths, and MDL."
+    "section": "What worked in the prompting",
+    "text": "What worked in the prompting\nUsing two different models and pushing beyond the first answer helped. Starting with definitions created a shared foundation; then asking “is this actually usable as a tokenizer?” forced a feasibility check and concrete trade‑offs. Requesting “novel ideas” and a “tailorable tokenizer” nudged the models to move from critique to constructive designs (e.g., VQ with byte‑fallback) rather than staying abstract. Framing the problem in terms of reversibility and predictability kept the discussion grounded in properties that matter for real systems."
   },
   {
-    "objectID": "posts/004_tokenizers/index.html#expected-vs-unexpected-class-concepts",
-    "href": "posts/004_tokenizers/index.html#expected-vs-unexpected-class-concepts",
+    "objectID": "posts/004_tokenizers/index.html#what-i-expected-vs-what-surprised-me",
+    "href": "posts/004_tokenizers/index.html#what-i-expected-vs-what-surprised-me",
     "title": "Tokenization Exploration",
-    "section": "Expected vs unexpected (class concepts)",
-    "text": "Expected vs unexpected (class concepts)\n\nLosslessness and invertibility (expected): DFT as a tokenizer fails exact round‑trip — aligns with our requirement that tokenization be reversible.\nInformation‑theoretic framing (expected): MDL/predictability is a better objective than raw compression frequency — matches lessons on optimizing for downstream loss.\nModel overconfidence (expected): Definitions were confident; feasibility analysis improved when we asked for constraints and tradeoffs.\nCreative yet grounded proposals (unexpectedly thorough): The jump from critique to concrete VQ‑Text with byte fallback reflects strong prior knowledge and aligns with class emphasis on data‑driven design."
+    "section": "What I expected vs what surprised me",
+    "text": "What I expected vs what surprised me\nI expected the definitions to be solid and the DFT idea to be challenged on reversibility and fit to discrete text. What surprised me was how quickly the conversation moved from critique to a concrete, workable direction: a learned vector‑quantized tokenizer with exact byte fallback, paired with a predictability‑oriented objective. That made the idea immediately testable rather than purely conceptual."
   },
   {
-    "objectID": "posts/004_tokenizers/index.html#how-to-improve-prompting-next-time",
-    "href": "posts/004_tokenizers/index.html#how-to-improve-prompting-next-time",
+    "objectID": "posts/004_tokenizers/index.html#how-id-prompt-next-time",
+    "href": "posts/004_tokenizers/index.html#how-id-prompt-next-time",
     "title": "Tokenization Exploration",
-    "section": "How to improve prompting next time",
-    "text": "How to improve prompting next time\n\nAsk for contrastive outputs: “Show two alternative designs and when each wins.”\nRequire citations or links: “Cite at least 2 papers or docs per proposal.”\nForce failure modes: “List 3 ways this approach can fail and mitigations.”\nDemand concrete tests: “Give a 10‑line PyTorch sketch and a toy eval plan.”\nCross‑check models explicitly: “Answer with GPT‑5; then critique that answer as Sonnet 4.5.”\nQuantify trade‑offs: “Estimate token savings vs perplexity change under MDL assumptions.”"
+    "section": "How I’d prompt next time",
+    "text": "How I’d prompt next time\nNext time I’d ask for two contrasting designs and when each is preferable, require a couple of citations, and force the model to spell out likely failure modes with mitigations. I’d also request a tiny code sketch and a toy evaluation plan so the proposal is actionable. Finally, I’d have one model critique the other’s answer and estimate simple trade‑offs like token savings versus predicted perplexity change."
   },
   {
     "objectID": "posts/004_tokenizers/index.html#concrete-outputs-sampled-snippets",
