@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Parsa Idehpour">
+<meta name="dcterms.date" content="2025-11-03">
+<meta name="description" content="I explored tokenization with LLMs and evaluated prompting effectiveness">
 
-<title>My Explorations with LLMs</title>
+<title>Tokenization Exploration – My Explorations with LLMs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,26 +26,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,79 +71,21 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">My Explorations with LLMs</span>
     </a>
   </div>
@@ -153,7 +96,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -176,212 +119,80 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">My Explorations with LLMs</h1>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Tokenization Exploration</h1>
+                  <div>
+        <div class="description">
+          I explored tokenization with LLMs and evaluated prompting effectiveness
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">prompting</div>
+                <div class="quarto-category">evaluation</div>
+                <div class="quarto-category">LLMs</div>
+              </div>
+                  </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Parsa Idehpour </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 3, 2025</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(5)</span></div><div class="category" data-category="YmlvbG9neQ==">biology <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y3VkYQ==">cuda <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZXZhbHVhdGlvbg==">evaluation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aW5mZXJlbmNl">inference <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aW5mb3JtYXRpb24tdGhlb3J5">information-theory <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExNcw==">LLMs <span class="quarto-category-count">(3)</span></div><div class="category" data-category="bG9naWM=">logic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cHJvbXB0aW5n">prompting <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c3lzdGVtcw==">systems <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGhlb3J5">theory <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dG9rZW5pemF0aW9u">tokenization <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dHJhbnNmb3JtZXJz">transformers <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<section id="context-and-assignment" class="level2">
+<h2 class="anchored" data-anchor-id="context-and-assignment">Context and assignment</h2>
+<p>I explored tokenization with LLMs (GPT‑5 and Sonnet 4.5) and provide feedback on a peer’s prompting strategy. I analyze effectiveness, cross‑model checks, improvements, and why outcomes were expected/unexpected based on class concepts.</p>
+<ul>
+<li>Evidence base: two chats exploring Discrete Fourier Transform (DFT), tokenizer design, and “better than BPE” ideas.</li>
+<li>Deliverable: A direct URL to my feedback on the issues page (added below when posted).</li>
+</ul>
+</section>
+<section id="what-the-interactions-showed-summary" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-interactions-showed-summary">What the interactions showed (summary)</h2>
+<ul>
+<li>DFT knowledge: The model stated standard DFT/IDFT formulas, properties, FFT relation, and practical notes — expected for a strong general model.</li>
+<li>Tokenizer idea critique: It argued a plain DFT isn’t a practical tokenizer for text (losslessness, semantics, variable length), but suggested Fourier inside models and feature augmentations — aligned with class emphasis on data‑model match.</li>
+<li>Novel tokenizer directions: Proposed learned/VQ tokenizers, morphology‑aware hybrids, adaptive tokenizers, information‑theoretic/MDL objectives, and graph/semantic clustering — consistent with “optimize for predictability, not just compression”.</li>
+</ul>
+</section>
+<section id="did-they-prompt-different-models-and-check-multiple-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="did-they-prompt-different-models-and-check-multiple-outputs">Did they prompt different models and check multiple outputs?</h2>
+<ul>
+<li>Yes — two separate model families were engaged (GPT‑5 and Sonnet 4.5). This is good practice for triangulation.</li>
+<li>Multiple outputs/checks: The threads iterate across related questions (DFT → tokenizer feasibility → alternatives), eliciting deeper reasoning rather than one‑shot answers. This aligns with our class guidance to sample more than once and compare.</li>
+</ul>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="cHJvbXB0aW5nJTJDZXZhbHVhdGlvbiUyQ0xMTXM=" data-listing-date-sort="1762128000000" data-listing-file-modified-sort="1762207454142" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="208">
-<div class="thumbnail"><a href="./posts/004_tokenizers/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/004_tokenizers/index.html" class="no-external">Tokenization Exploration</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvbXB0aW5n'); return false;">prompting</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZXZhbHVhdGlvbg=='); return false;">evaluation</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TExNcw=='); return false;">LLMs</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/004_tokenizers/index.html" class="no-external">
-<p>I explored tokenization with LLMs and evaluated prompting effectiveness</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/004_tokenizers/index.html" class="no-external">
-<div class="listing-date">
-Nov 3, 2025
-</div>
-<div class="listing-author">
-Parsa Idehpour
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="TExNcyUyQ2Jpb2xvZ3klMkN0b2tlbml6YXRpb24=" data-listing-date-sort="1757808000000" data-listing-file-modified-sort="1762207454141" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="254">
-<div class="thumbnail"><a href="./posts/001_tokenization_dna_models/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts/001_tokenization_dna_models/Evo2_banner.png" alt="EVO-2 model diagram"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/001_tokenization_dna_models/index.html" class="no-external">Tokenization Laws and DNA Models</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('TExNcw=='); return false;">LLMs</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YmlvbG9neQ=='); return false;">biology</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dG9rZW5pemF0aW9u'); return false;">tokenization</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/001_tokenization_dna_models/index.html" class="no-external">
-<p>Understanding k-mer tokenization and EVO-2 style nucleotide modeling</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/001_tokenization_dna_models/index.html" class="no-external">
-<div class="listing-date">
-Sep 14, 2025
-</div>
-<div class="listing-author">
-Parsa Idehpour
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="dGhlb3J5JTJDdHJhbnNmb3JtZXJzJTJDaW5mb3JtYXRpb24tdGhlb3J5" data-listing-date-sort="1757808000000" data-listing-file-modified-sort="1762207454141" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="176">
-<div class="thumbnail"><a href="./posts/002_information_theory_transformers/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts/002_information_theory_transformers/entropy-27-00589-g001-550.jpg" alt="Information-theoretic view of training"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/002_information_theory_transformers/index.html" class="no-external">Information-Theoretic Bounds and Training Dynamics of Transformers</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGhlb3J5'); return false;">theory</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dHJhbnNmb3JtZXJz'); return false;">transformers</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('aW5mb3JtYXRpb24tdGhlb3J5'); return false;">information-theory</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/002_information_theory_transformers/index.html" class="no-external">
-<p>Explaining transformer training through entropy, cross-entropy, and bits-per-token</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/002_information_theory_transformers/index.html" class="no-external">
-<div class="listing-date">
-Sep 14, 2025
-</div>
-<div class="listing-author">
-Parsa Idehpour
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="c3lzdGVtcyUyQ2luZmVyZW5jZSUyQ2N1ZGE=" data-listing-date-sort="1757808000000" data-listing-file-modified-sort="1762207454142" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="434">
-<div class="thumbnail"><a href="./posts/003_cuda_inference_kernels/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts/003_cuda_inference_kernels/vllm-logo-text-light.png" alt="vLLM"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/003_cuda_inference_kernels/index.html" class="no-external">CUDA Inference Kernels and Serving Stacks</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3lzdGVtcw=='); return false;">systems</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('aW5mZXJlbmNl'); return false;">inference</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y3VkYQ=='); return false;">cuda</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/003_cuda_inference_kernels/index.html" class="no-external">
-<p>Key kernels, memory layouts, and serving choices (with vLLM notes)</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/003_cuda_inference_kernels/index.html" class="no-external">
-<div class="listing-date">
-Sep 14, 2025
-</div>
-<div class="listing-author">
-Parsa Idehpour
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="TExNcyUyQ3Byb21wdGluZyUyQ2xvZ2lj" data-listing-date-sort="1706832000000" data-listing-file-modified-sort="1762207454131" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="450">
-<div class="thumbnail"><a href="./posts/000_test_post/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts/000_test_post/gpt3-5.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/000_test_post/index.html" class="no-external">A test post</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('TExNcw=='); return false;">LLMs</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvbXB0aW5n'); return false;">prompting</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bG9naWM='); return false;">logic</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/000_test_post/index.html" class="no-external">
-<p>An example post from a Jupyter notebook</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/000_test_post/index.html" class="no-external">
-<div class="listing-date">
-Feb 2, 2024
-</div>
-<div class="listing-author">
-An LLM User
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

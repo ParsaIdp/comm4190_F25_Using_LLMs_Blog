@@ -1,10 +1,10 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "My Explorations with LLMs",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "CUDA Inference Kernels and Serving Stacks\n\n\n\nsystems\n\ninference\n\ncuda\n\n\n\nKey kernels, memory layouts, and serving choices (with vLLM notes)\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nTokenization Laws and DNA Models\n\n\n\nLLMs\n\nbiology\n\ntokenization\n\n\n\nUnderstanding k-mer tokenization and EVO-2 style nucleotide modeling\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nInformation-Theoretic Bounds and Training Dynamics of Transformers\n\n\n\ntheory\n\ntransformers\n\ninformation-theory\n\n\n\nExplaining transformer training through entropy, cross-entropy, and bits-per-token\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nA test post\n\n\n\nLLMs\n\nprompting\n\nlogic\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nFeb 2, 2024\n\n\nAn LLM User\n\n\n\n\n\nNo matching items"
+    "text": "About this blog"
   },
   {
     "objectID": "posts/002_information_theory_transformers/index.html",
@@ -33,6 +33,55 @@
     "title": "Information-Theoretic Bounds and Training Dynamics of Transformers",
     "section": "Training dynamics as compression",
     "text": "Training dynamics as compression\n\nMinimizing cross-entropy is equivalent to minimizing expected code length.\nEarly training reduces redundant predictability (frequent patterns); later, model learns rarer structure.\nCapacity vs. data curve: more parameters lower achievable cross-entropy until compute/data bottlenecks.\nGeneralization: MDL view—good models compress both train and test data with similar code lengths."
+  },
+  {
+    "objectID": "posts/004_tokenizers/index.html",
+    "href": "posts/004_tokenizers/index.html",
+    "title": "Tokenization Exploration",
+    "section": "",
+    "text": "I explored tokenization with LLMs (GPT‑5 and Sonnet 4.5) and provide feedback on a peer’s prompting strategy. I analyze effectiveness, cross‑model checks, improvements, and why outcomes were expected/unexpected based on class concepts.\n\nEvidence base: two chats exploring Discrete Fourier Transform (DFT), tokenizer design, and “better than BPE” ideas.\nDeliverable: A direct URL to my feedback on the issues page (added below when posted)."
+  },
+  {
+    "objectID": "posts/004_tokenizers/index.html#context-and-assignment",
+    "href": "posts/004_tokenizers/index.html#context-and-assignment",
+    "title": "Tokenization Exploration",
+    "section": "",
+    "text": "I explored tokenization with LLMs (GPT‑5 and Sonnet 4.5) and provide feedback on a peer’s prompting strategy. I analyze effectiveness, cross‑model checks, improvements, and why outcomes were expected/unexpected based on class concepts.\n\nEvidence base: two chats exploring Discrete Fourier Transform (DFT), tokenizer design, and “better than BPE” ideas.\nDeliverable: A direct URL to my feedback on the issues page (added below when posted)."
+  },
+  {
+    "objectID": "posts/004_tokenizers/index.html#what-the-interactions-showed-summary",
+    "href": "posts/004_tokenizers/index.html#what-the-interactions-showed-summary",
+    "title": "Tokenization Exploration",
+    "section": "What the interactions showed (summary)",
+    "text": "What the interactions showed (summary)\n\nDFT knowledge: The model stated standard DFT/IDFT formulas, properties, FFT relation, and practical notes — expected for a strong general model.\nTokenizer idea critique: It argued a plain DFT isn’t a practical tokenizer for text (losslessness, semantics, variable length), but suggested Fourier inside models and feature augmentations — aligned with class emphasis on data‑model match.\nNovel tokenizer directions: Proposed learned/VQ tokenizers, morphology‑aware hybrids, adaptive tokenizers, information‑theoretic/MDL objectives, and graph/semantic clustering — consistent with “optimize for predictability, not just compression”."
+  },
+  {
+    "objectID": "posts/004_tokenizers/index.html#did-they-prompt-different-models-and-check-multiple-outputs",
+    "href": "posts/004_tokenizers/index.html#did-they-prompt-different-models-and-check-multiple-outputs",
+    "title": "Tokenization Exploration",
+    "section": "Did they prompt different models and check multiple outputs?",
+    "text": "Did they prompt different models and check multiple outputs?\n\nYes — two separate model families were engaged (GPT‑5 and Sonnet 4.5). This is good practice for triangulation.\nMultiple outputs/checks: The threads iterate across related questions (DFT → tokenizer feasibility → alternatives), eliciting deeper reasoning rather than one‑shot answers. This aligns with our class guidance to sample more than once and compare."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "My Explorations with LLMs",
+    "section": "",
+    "text": "Tokenization Exploration\n\n\n\nprompting\n\nevaluation\n\nLLMs\n\n\n\nI explored tokenization with LLMs and evaluated prompting effectiveness\n\n\n\n\n\nNov 3, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nTokenization Laws and DNA Models\n\n\n\nLLMs\n\nbiology\n\ntokenization\n\n\n\nUnderstanding k-mer tokenization and EVO-2 style nucleotide modeling\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nInformation-Theoretic Bounds and Training Dynamics of Transformers\n\n\n\ntheory\n\ntransformers\n\ninformation-theory\n\n\n\nExplaining transformer training through entropy, cross-entropy, and bits-per-token\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nCUDA Inference Kernels and Serving Stacks\n\n\n\nsystems\n\ninference\n\ncuda\n\n\n\nKey kernels, memory layouts, and serving choices (with vLLM notes)\n\n\n\n\n\nSep 14, 2025\n\n\nParsa Idehpour\n\n\n\n\n\n\n\n\n\n\n\n\nA test post\n\n\n\nLLMs\n\nprompting\n\nlogic\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nFeb 2, 2024\n\n\nAn LLM User\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/000_test_post/index.html",
+    "href": "posts/000_test_post/index.html",
+    "title": "A test post",
+    "section": "",
+    "text": "Read the following and see if you can answer the question:\n\n\nThere are three boxes in a stack. A pink one, a purple one and a green one. The pink one is in the middle of the stack with the purple below it. What is the color of the box on the bottom of the stack?\n\nMost likely you answered purple…\nBut it is possible you first said green (don’t worry if you did it is quite a common response!)\n\n\nIt’s a verbal visual problem that requires some deliberation and most likely for us to create a visual image of a stack of boxes as a reasoning aid.\nNotice also the complexity of the language used in the prompt to describe the scene. The use of natural language as opposed to a formal/logical calculus does hold the potential for ambiguity (multiple interpretations) and inexactness. However, it is the most normal/natural, efficient and broadly accessible way of communicating such information.\nNotice 1. The use of anaphor or reference. - Three BOXES -&gt; a pink/purple/green ONE as opposed to a pink box, a purple box and a green box. - The PINK ONE is in the middle ... the purple {BOX} below IT {the pink box}\nWe tend to try and avoid this kind of repetition to make our speech more coherent.\n\nAlthough the description in language may not be entirely concise, there is no real ambiguity as to how the boxes can be arranged. It must be: | Box | Stack position | | — | — | | GREEN | top | | PINK | middle | | PURPLE | bottom |\n\n\n\n\nGPT3.5 Turbo\n\nHad some difficulties and answered green\nLlama2 (chat 7B version)\n\n\nAnswered correctly (purple) and used some so-called chain-of-thought reasoning\n\nBing Chat (MS Co-pilot)\nThis LLM is GPT4 with some Microsoft specific tuning and RAG (search) additions.\nIt get’s it correct:\n\nThe color of the box on the bottom of the stack is purple. This is because the purple box is below the pink one, which is in the middle of the stack. Therefore, the purple box must be the lowest one. 🟪\n\nBut when you follow up and ask it to create visual representation of the box arrangement\n\nPROMPT: Can you create a visual representation of how the boxes are arranged?\n\nIt responds\n\nRESPONSE: Sure, I’ll try to create that. Here is a visual representation of how the boxes are arranged:\n\nAnd uses DALL-E3 to create 4 different attempts at a visual representation:\n\nNONE OF WHICH ARE CORRECT!!!"
+  },
+  {
+    "objectID": "posts/000_test_post/index.html#a-visualization-problem-for-llms",
+    "href": "posts/000_test_post/index.html#a-visualization-problem-for-llms",
+    "title": "A test post",
+    "section": "",
+    "text": "Read the following and see if you can answer the question:\n\n\nThere are three boxes in a stack. A pink one, a purple one and a green one. The pink one is in the middle of the stack with the purple below it. What is the color of the box on the bottom of the stack?\n\nMost likely you answered purple…\nBut it is possible you first said green (don’t worry if you did it is quite a common response!)\n\n\nIt’s a verbal visual problem that requires some deliberation and most likely for us to create a visual image of a stack of boxes as a reasoning aid.\nNotice also the complexity of the language used in the prompt to describe the scene. The use of natural language as opposed to a formal/logical calculus does hold the potential for ambiguity (multiple interpretations) and inexactness. However, it is the most normal/natural, efficient and broadly accessible way of communicating such information.\nNotice 1. The use of anaphor or reference. - Three BOXES -&gt; a pink/purple/green ONE as opposed to a pink box, a purple box and a green box. - The PINK ONE is in the middle ... the purple {BOX} below IT {the pink box}\nWe tend to try and avoid this kind of repetition to make our speech more coherent.\n\nAlthough the description in language may not be entirely concise, there is no real ambiguity as to how the boxes can be arranged. It must be: | Box | Stack position | | — | — | | GREEN | top | | PINK | middle | | PURPLE | bottom |\n\n\n\n\nGPT3.5 Turbo\n\nHad some difficulties and answered green\nLlama2 (chat 7B version)\n\n\nAnswered correctly (purple) and used some so-called chain-of-thought reasoning\n\nBing Chat (MS Co-pilot)\nThis LLM is GPT4 with some Microsoft specific tuning and RAG (search) additions.\nIt get’s it correct:\n\nThe color of the box on the bottom of the stack is purple. This is because the purple box is below the pink one, which is in the middle of the stack. Therefore, the purple box must be the lowest one. 🟪\n\nBut when you follow up and ask it to create visual representation of the box arrangement\n\nPROMPT: Can you create a visual representation of how the boxes are arranged?\n\nIt responds\n\nRESPONSE: Sure, I’ll try to create that. Here is a visual representation of how the boxes are arranged:\n\nAnd uses DALL-E3 to create 4 different attempts at a visual representation:\n\nNONE OF WHICH ARE CORRECT!!!"
   },
   {
     "objectID": "posts/001_tokenization_dna_models/index.html",
@@ -131,26 +180,5 @@
     "title": "CUDA Inference Kernels and Serving Stacks",
     "section": "References",
     "text": "References\n\nvLLM docs and papers (continuous batching, paged KV)\nTensorRT-LLM samples and perf guides\nFlashAttention papers and kernels\nNVIDIA Triton Inference Server docs"
-  },
-  {
-    "objectID": "posts/000_test_post/index.html",
-    "href": "posts/000_test_post/index.html",
-    "title": "A test post",
-    "section": "",
-    "text": "Read the following and see if you can answer the question:\n\n\nThere are three boxes in a stack. A pink one, a purple one and a green one. The pink one is in the middle of the stack with the purple below it. What is the color of the box on the bottom of the stack?\n\nMost likely you answered purple…\nBut it is possible you first said green (don’t worry if you did it is quite a common response!)\n\n\nIt’s a verbal visual problem that requires some deliberation and most likely for us to create a visual image of a stack of boxes as a reasoning aid.\nNotice also the complexity of the language used in the prompt to describe the scene. The use of natural language as opposed to a formal/logical calculus does hold the potential for ambiguity (multiple interpretations) and inexactness. However, it is the most normal/natural, efficient and broadly accessible way of communicating such information.\nNotice 1. The use of anaphor or reference. - Three BOXES -&gt; a pink/purple/green ONE as opposed to a pink box, a purple box and a green box. - The PINK ONE is in the middle ... the purple {BOX} below IT {the pink box}\nWe tend to try and avoid this kind of repetition to make our speech more coherent.\n\nAlthough the description in language may not be entirely concise, there is no real ambiguity as to how the boxes can be arranged. It must be: | Box | Stack position | | — | — | | GREEN | top | | PINK | middle | | PURPLE | bottom |\n\n\n\n\nGPT3.5 Turbo\n\nHad some difficulties and answered green\nLlama2 (chat 7B version)\n\n\nAnswered correctly (purple) and used some so-called chain-of-thought reasoning\n\nBing Chat (MS Co-pilot)\nThis LLM is GPT4 with some Microsoft specific tuning and RAG (search) additions.\nIt get’s it correct:\n\nThe color of the box on the bottom of the stack is purple. This is because the purple box is below the pink one, which is in the middle of the stack. Therefore, the purple box must be the lowest one. 🟪\n\nBut when you follow up and ask it to create visual representation of the box arrangement\n\nPROMPT: Can you create a visual representation of how the boxes are arranged?\n\nIt responds\n\nRESPONSE: Sure, I’ll try to create that. Here is a visual representation of how the boxes are arranged:\n\nAnd uses DALL-E3 to create 4 different attempts at a visual representation:\n\nNONE OF WHICH ARE CORRECT!!!"
-  },
-  {
-    "objectID": "posts/000_test_post/index.html#a-visualization-problem-for-llms",
-    "href": "posts/000_test_post/index.html#a-visualization-problem-for-llms",
-    "title": "A test post",
-    "section": "",
-    "text": "Read the following and see if you can answer the question:\n\n\nThere are three boxes in a stack. A pink one, a purple one and a green one. The pink one is in the middle of the stack with the purple below it. What is the color of the box on the bottom of the stack?\n\nMost likely you answered purple…\nBut it is possible you first said green (don’t worry if you did it is quite a common response!)\n\n\nIt’s a verbal visual problem that requires some deliberation and most likely for us to create a visual image of a stack of boxes as a reasoning aid.\nNotice also the complexity of the language used in the prompt to describe the scene. The use of natural language as opposed to a formal/logical calculus does hold the potential for ambiguity (multiple interpretations) and inexactness. However, it is the most normal/natural, efficient and broadly accessible way of communicating such information.\nNotice 1. The use of anaphor or reference. - Three BOXES -&gt; a pink/purple/green ONE as opposed to a pink box, a purple box and a green box. - The PINK ONE is in the middle ... the purple {BOX} below IT {the pink box}\nWe tend to try and avoid this kind of repetition to make our speech more coherent.\n\nAlthough the description in language may not be entirely concise, there is no real ambiguity as to how the boxes can be arranged. It must be: | Box | Stack position | | — | — | | GREEN | top | | PINK | middle | | PURPLE | bottom |\n\n\n\n\nGPT3.5 Turbo\n\nHad some difficulties and answered green\nLlama2 (chat 7B version)\n\n\nAnswered correctly (purple) and used some so-called chain-of-thought reasoning\n\nBing Chat (MS Co-pilot)\nThis LLM is GPT4 with some Microsoft specific tuning and RAG (search) additions.\nIt get’s it correct:\n\nThe color of the box on the bottom of the stack is purple. This is because the purple box is below the pink one, which is in the middle of the stack. Therefore, the purple box must be the lowest one. 🟪\n\nBut when you follow up and ask it to create visual representation of the box arrangement\n\nPROMPT: Can you create a visual representation of how the boxes are arranged?\n\nIt responds\n\nRESPONSE: Sure, I’ll try to create that. Here is a visual representation of how the boxes are arranged:\n\nAnd uses DALL-E3 to create 4 different attempts at a visual representation:\n\nNONE OF WHICH ARE CORRECT!!!"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this blog"
   }
 ]
