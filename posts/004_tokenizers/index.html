@@ -188,6 +188,59 @@ ul.task-list li input[type="checkbox"] {
 <li>Yes — two separate model families were engaged (GPT‑5 and Sonnet 4.5). This is good practice for triangulation.</li>
 <li>Multiple outputs/checks: The threads iterate across related questions (DFT → tokenizer feasibility → alternatives), eliciting deeper reasoning rather than one‑shot answers. This aligns with our class guidance to sample more than once and compare.</li>
 </ul>
+</section>
+<section id="what-i-asked-conversation-excerpts" class="level2">
+<h2 class="anchored" data-anchor-id="what-i-asked-conversation-excerpts">What I asked (conversation excerpts)</h2>
+<ul>
+<li>DFT basics: “do you know discrete Fourier transform?” → requested definitions and properties.</li>
+<li>Tokenizer feasibility: “imagine we want to use this as tokenizer to LLMs… is that possible?”</li>
+<li>Beyond BPE: “what are some plausible ways to tokenize better than BPE… novel ideas?”</li>
+<li>Tailored tokenizer: “make a tokenizer that can be tailored to your data.”</li>
+</ul>
+<blockquote class="blockquote">
+<p>Key thread: DFT as tokenizer → critique → alternatives (learned/VQ, morphology, adaptive/MDL) → concrete design for a data‑tailorable tokenizer.</p>
+</blockquote>
+</section>
+<section id="prompting-effectiveness-what-worked" class="level2">
+<h2 class="anchored" data-anchor-id="prompting-effectiveness-what-worked">Prompting effectiveness: what worked</h2>
+<ul>
+<li>Multi‑model triangulation: Comparing GPT‑5 and Sonnet 4.5 surfaced consensus (DFT basics) and nuance (tokenizer feasibility).</li>
+<li>Iterative deepening: Follow‑ups moved from definition → feasibility → design alternatives → concrete architecture. This reduced surface‑level answers.</li>
+<li>Specific, evaluable asks: Requests for “novel ideas” and “tailorable tokenizer” elicited structured proposals (VQ, morphology, adaptive/MDL).</li>
+<li>Tying to data: Pushing for “according‑to‑data” grounded the discussion in invertibility, lossless paths, and MDL.</li>
+</ul>
+</section>
+<section id="expected-vs-unexpected-class-concepts" class="level2">
+<h2 class="anchored" data-anchor-id="expected-vs-unexpected-class-concepts">Expected vs unexpected (class concepts)</h2>
+<ul>
+<li>Losslessness and invertibility (expected): DFT as a tokenizer fails exact round‑trip — aligns with our requirement that tokenization be reversible.</li>
+<li>Information‑theoretic framing (expected): MDL/predictability is a better objective than raw compression frequency — matches lessons on optimizing for downstream loss.</li>
+<li>Model overconfidence (expected): Definitions were confident; feasibility analysis improved when we asked for constraints and tradeoffs.</li>
+<li>Creative yet grounded proposals (unexpectedly thorough): The jump from critique to concrete VQ‑Text with byte fallback reflects strong prior knowledge and aligns with class emphasis on data‑driven design.</li>
+</ul>
+</section>
+<section id="how-to-improve-prompting-next-time" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-improve-prompting-next-time">How to improve prompting next time</h2>
+<ul>
+<li>Ask for contrastive outputs: “Show two alternative designs and when each wins.”</li>
+<li>Require citations or links: “Cite at least 2 papers or docs per proposal.”</li>
+<li>Force failure modes: “List 3 ways this approach can fail and mitigations.”</li>
+<li>Demand concrete tests: “Give a 10‑line PyTorch sketch and a toy eval plan.”</li>
+<li>Cross‑check models explicitly: “Answer with GPT‑5; then critique that answer as Sonnet 4.5.”</li>
+<li>Quantify trade‑offs: “Estimate token savings vs perplexity change under MDL assumptions.”</li>
+</ul>
+</section>
+<section id="concrete-outputs-sampled-snippets" class="level2">
+<h2 class="anchored" data-anchor-id="concrete-outputs-sampled-snippets">Concrete outputs sampled (snippets)</h2>
+<blockquote class="blockquote">
+<p>DFT feasibility as tokenizer: “Using a plain DFT as the tokenizer for text LLMs isn’t practical… it’s lossy, length‑rigid, and not semantically aligned. Use Fourier ideas inside the model or as features instead.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>Novel tokenization ideas: “Learned VQ tokenizers, morphology‑aware hybrids, adaptive/MDL tokenization, semantic/graph clustering, multi‑resolution tokens.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>Data‑tailorable tokenizer: “VQ‑Text with byte fallback: learned codes for common spans; exact byte runs for everything else; train with reconstruction + commitment + predictability (MDL‑style).”</p>
+</blockquote>
 
 
 </section>
