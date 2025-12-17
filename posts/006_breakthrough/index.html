@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Parsa Idehpour">
+<meta name="dcterms.date" content="2025-12-16">
+<meta name="description" content="My AI-focused notes on Bennett’s ‘reinforcing’ breakthrough: temporal-difference learning as a biological design pattern.">
 
-<title>My Explorations with LLMs</title>
+<title>Breakthrough #2 — Reinforcing: Dopamine, Basal Ganglia, and the Birth of RL – My Explorations with LLMs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,26 +26,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,77 +71,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">My Explorations with LLMs</span>
     </a>
   </div>
@@ -151,7 +94,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -174,284 +117,74 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">My Explorations with LLMs</h1>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Breakthrough #2 — Reinforcing: Dopamine, Basal Ganglia, and the Birth of RL</h1>
+                  <div>
+        <div class="description">
+          My AI-focused notes on Bennett’s ‘reinforcing’ breakthrough: temporal-difference learning as a biological design pattern.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">neuroscience</div>
+                <div class="quarto-category">reinforcement-learning</div>
+                <div class="quarto-category">dopamine</div>
+                <div class="quarto-category">evolution</div>
+              </div>
+                  </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Parsa Idehpour </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 16, 2025</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(7)</span></div><div class="category" data-category="YmlvbG9neQ==">biology <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y29udHJvbA==">control <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y3VkYQ==">cuda <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZG9wYW1pbmU=">dopamine <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZXZhbHVhdGlvbg==">evaluation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZXZvbHV0aW9u">evolution <span class="quarto-category-count">(2)</span></div><div class="category" data-category="aW5mZXJlbmNl">inference <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aW5mb3JtYXRpb24tdGhlb3J5">information-theory <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TExNcw==">LLMs <span class="quarto-category-count">(3)</span></div><div class="category" data-category="bG9naWM=">logic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bmV1cm9zY2llbmNl">neuroscience <span class="quarto-category-count">(2)</span></div><div class="category" data-category="cHJvbXB0aW5n">prompting <span class="quarto-category-count">(2)</span></div><div class="category" data-category="cmVpbmZvcmNlbWVudC1sZWFybmluZw==">reinforcement-learning <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c3lzdGVtcw==">systems <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGhlb3J5">theory <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dG9rZW5pemF0aW9u">tokenization <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dHJhbnNmb3JtZXJz">transformers <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="bmV1cm9zY2llbmNlJTJDZXZvbHV0aW9uJTJDcmVpbmZvcmNlbWVudC1sZWFybmluZyUyQ2NvbnRyb2w=" data-listing-date-sort="1765843200000" data-listing-file-modified-sort="1765946565196" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="641">
-<div class="thumbnail"><a href="./posts/005_breakthrough1/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts/005_breakthrough1/image.png" alt="Gradient following"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/005_breakthrough1/index.html" class="no-external">Breakthrough #1 — Steering: How the First Brains Solved Navigation</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('bmV1cm9zY2llbmNl'); return false;">neuroscience</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZXZvbHV0aW9u'); return false;">evolution</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cmVpbmZvcmNlbWVudC1sZWFybmluZw=='); return false;">reinforcement-learning</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y29udHJvbA=='); return false;">control</div>
-
+<p>Bennett’s second breakthrough—reinforcing—is where the story becomes recognizably “learning from reward.” Steering can produce competent behavior, but it cannot systematically improve itself when the environment changes. Reinforcing adds a mechanism that tunes action tendencies based on outcomes, and Bennett anchors this in vertebrate circuitry: basal ganglia plus dopamine.</p>
+<p>The part that matters is not the anatomical labels; it’s the design pattern. You have an action-selection system that decides what gets executed, and you have a scalar teaching signal that nudges that system so it repeats actions with better long-run consequences.</p>
+<p>Bennett emphasizes that the teaching signal is not simply “reward happened.” It’s closer to “that was better or worse than expected.” That small conceptual twist is what makes reinforcement scale to real life, where outcomes are delayed and ambiguous.</p>
+<p>If your learning signal only arrives at the endpoint, you can’t assign credit to the earlier choices that made the endpoint possible. A prediction-based teaching signal solves this by moving learning earlier in time: cues become meaningful because they predict outcomes, and the learning signal lights up at those cues rather than only at the reward itself. When an expected reward fails to arrive, the teaching signal goes negative. This gives you a bidirectional correction mechanism that shapes behavior efficiently.</p>
+<p>This is also why Bennett pushes back on the “dopamine = pleasure” caricature. Pleasure is an experience; learning is an algorithm. A teaching signal must carry information about mismatch between expectation and reality. When you interpret the dopamine story through that lens, a lot of behavioral phenomena stop being mysterious.</p>
+<p>Anticipation is what it looks like when predictors of reward become valuable. Disappointment is what it looks like when expectation is violated. Motivation becomes the behavioral manifestation of predicted value biasing action selection before the reward exists. Bennett is implicitly saying: many affective states are not add-ons; they are control-relevant summaries of prediction and uncertainty.</p>
+<p>A concept I think Bennett gets right is the separation between <strong>what counts as reward</strong> and <strong>how behavior is shaped by reward</strong>. Biological reward is anchored to survival: hunger, thirst, pain, thermoregulation, social safety. Reinforcement is the learning mechanism that figures out what to do in order to satisfy those needs in a particular environment.</p>
+<p>That separation is important for two reasons. First, it explains flexibility: the organism can learn novel strategies without evolution rewriting its physiology every generation. Second, it highlights the danger of misalignment in any system with powerful optimization: if the reward signal is corrupted, the learning machinery will still optimize it, often in pathological ways. Bennett’s later discussion of superintelligence rhymes with this: the bigger the optimizer, the more central the objective becomes.</p>
+<p>Reinforcement creates habits. Habits are a feature, not a bug: they’re fast, robust, and cheap. But Bennett treats habit learning as having an inherent ceiling. It’s slow to acquire when outcomes are rare. It becomes rigid in distribution shift. It struggles when you need to evaluate novel actions you’ve never tried.</p>
+<p>That limitation sets up the next breakthrough. Once acting becomes expensive, evolution has an incentive to build a system that can learn without acting—by imagining. Reinforcing makes the agent trainable; simulating makes it sample efficient.</p>
+<p><br>
+</p>
+<div style="text-align:center;">
+  <img src="image.png" alt="Action gating loop" width="65%">
+  <p><em>Figure 1. Action gating trained by scalar feedback (actor–critic motif as an intuition)</em></p>
 </div>
-<div class="delink listing-description"><a href="./posts/005_breakthrough1/index.html" class="no-external">
-<p>My AI-focused notes on Bennett’s ‘steering’ breakthrough: valence, action selection, and why bilateral bodies made brains worth it.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/005_breakthrough1/index.html" class="no-external">
-<div class="listing-date">
-Dec 16, 2025
-</div>
-<div class="listing-author">
-Parsa Idehpour
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="bmV1cm9zY2llbmNlJTJDcmVpbmZvcmNlbWVudC1sZWFybmluZyUyQ2RvcGFtaW5lJTJDZXZvbHV0aW9u" data-listing-date-sort="1765843200000" data-listing-file-modified-sort="1765946565196" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="540">
-<div class="thumbnail"><a href="./posts/006_breakthrough/index.html" class="no-external">
 
-<p class="card-img-top"><img src="posts/006_breakthrough/image.png" alt="Action gating loop"  class="thumbnail-image card-img"/></p>
 
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/006_breakthrough/index.html" class="no-external">Breakthrough #2 — Reinforcing: Dopamine, Basal Ganglia, and the Birth of RL</a>
-</h3>
-<div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bmV1cm9zY2llbmNl'); return false;">neuroscience</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cmVpbmZvcmNlbWVudC1sZWFybmluZw=='); return false;">reinforcement-learning</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZG9wYW1pbmU='); return false;">dopamine</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZXZvbHV0aW9u'); return false;">evolution</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/006_breakthrough/index.html" class="no-external">
-<p>My AI-focused notes on Bennett’s ‘reinforcing’ breakthrough: temporal-difference learning as a biological design pattern.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/006_breakthrough/index.html" class="no-external">
-<div class="listing-date">
-Dec 16, 2025
-</div>
-<div class="listing-author">
-Parsa Idehpour
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="cHJvbXB0aW5nJTJDZXZhbHVhdGlvbiUyQ0xMTXM=" data-listing-date-sort="1762128000000" data-listing-file-modified-sort="1765946565194" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="623">
-<div class="thumbnail"><a href="./posts/004_tokenizers/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/004_tokenizers/index.html" class="no-external">Tokenization Exploration</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvbXB0aW5n'); return false;">prompting</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZXZhbHVhdGlvbg=='); return false;">evaluation</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TExNcw=='); return false;">LLMs</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/004_tokenizers/index.html" class="no-external">
-<p>I explored tokenization with LLMs and evaluated prompting effectiveness</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/004_tokenizers/index.html" class="no-external">
-<div class="listing-date">
-Nov 3, 2025
-</div>
-<div class="listing-author">
-Parsa Idehpour
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="TExNcyUyQ2Jpb2xvZ3klMkN0b2tlbml6YXRpb24=" data-listing-date-sort="1757808000000" data-listing-file-modified-sort="1765946565192" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="254">
-<div class="thumbnail"><a href="./posts/001_tokenization_dna_models/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts/001_tokenization_dna_models/Evo2_banner.png" alt="EVO-2 model diagram"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/001_tokenization_dna_models/index.html" class="no-external">Tokenization Laws and DNA Models</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('TExNcw=='); return false;">LLMs</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YmlvbG9neQ=='); return false;">biology</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dG9rZW5pemF0aW9u'); return false;">tokenization</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/001_tokenization_dna_models/index.html" class="no-external">
-<p>Understanding k-mer tokenization and EVO-2 style nucleotide modeling</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/001_tokenization_dna_models/index.html" class="no-external">
-<div class="listing-date">
-Sep 14, 2025
-</div>
-<div class="listing-author">
-Parsa Idehpour
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="dGhlb3J5JTJDdHJhbnNmb3JtZXJzJTJDaW5mb3JtYXRpb24tdGhlb3J5" data-listing-date-sort="1757808000000" data-listing-file-modified-sort="1765946565193" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="176">
-<div class="thumbnail"><a href="./posts/002_information_theory_transformers/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts/002_information_theory_transformers/entropy-27-00589-g001-550.jpg" alt="Information-theoretic view of training"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/002_information_theory_transformers/index.html" class="no-external">Information-Theoretic Bounds and Training Dynamics of Transformers</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGhlb3J5'); return false;">theory</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dHJhbnNmb3JtZXJz'); return false;">transformers</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('aW5mb3JtYXRpb24tdGhlb3J5'); return false;">information-theory</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/002_information_theory_transformers/index.html" class="no-external">
-<p>Explaining transformer training through entropy, cross-entropy, and bits-per-token</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/002_information_theory_transformers/index.html" class="no-external">
-<div class="listing-date">
-Sep 14, 2025
-</div>
-<div class="listing-author">
-Parsa Idehpour
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="c3lzdGVtcyUyQ2luZmVyZW5jZSUyQ2N1ZGE=" data-listing-date-sort="1757808000000" data-listing-file-modified-sort="1765946565193" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="434">
-<div class="thumbnail"><a href="./posts/003_cuda_inference_kernels/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts/003_cuda_inference_kernels/vllm-logo-text-light.png" alt="vLLM"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/003_cuda_inference_kernels/index.html" class="no-external">CUDA Inference Kernels and Serving Stacks</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3lzdGVtcw=='); return false;">systems</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('aW5mZXJlbmNl'); return false;">inference</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y3VkYQ=='); return false;">cuda</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/003_cuda_inference_kernels/index.html" class="no-external">
-<p>Key kernels, memory layouts, and serving choices (with vLLM notes)</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/003_cuda_inference_kernels/index.html" class="no-external">
-<div class="listing-date">
-Sep 14, 2025
-</div>
-<div class="listing-author">
-Parsa Idehpour
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="TExNcyUyQ3Byb21wdGluZyUyQ2xvZ2lj" data-listing-date-sort="1706832000000" data-listing-file-modified-sort="1765946565183" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="450">
-<div class="thumbnail"><a href="./posts/000_test_post/index.html" class="no-external">
-
-<p class="card-img-top"><img src="posts/000_test_post/gpt3-5.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/000_test_post/index.html" class="no-external">A test post</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('TExNcw=='); return false;">LLMs</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHJvbXB0aW5n'); return false;">prompting</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bG9naWM='); return false;">logic</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/000_test_post/index.html" class="no-external">
-<p>An example post from a Jupyter notebook</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/000_test_post/index.html" class="no-external">
-<div class="listing-date">
-Feb 2, 2024
-</div>
-<div class="listing-author">
-An LLM User
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

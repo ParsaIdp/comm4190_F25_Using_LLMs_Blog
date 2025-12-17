@@ -2,34 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/about.html</loc>
-    <lastmod>2025-12-17T01:11:44.352Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/002_information_theory_transformers/index.html</loc>
-    <lastmod>2025-12-17T01:11:44.364Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/001_tokenization_dna_models/index.html</loc>
-    <lastmod>2025-12-17T01:11:44.363Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/000_test_post/index.html</loc>
-    <lastmod>2025-12-17T01:11:44.353Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/index.html</loc>
-    <lastmod>2025-12-17T01:11:44.352Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/004_tokenizers/index.html</loc>
-    <lastmod>2025-12-17T01:11:44.365Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/005_breakthrough1/index.html</loc>
-    <lastmod>2025-12-17T01:11:44.367Z</lastmod>
+    <lastmod>2025-12-17T04:42:45.181Z</lastmod>
   </url>
   <url>
     <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/003_cuda_inference_kernels/index.html</loc>
-    <lastmod>2025-12-17T01:11:44.364Z</lastmod>
+    <lastmod>2025-12-17T04:42:45.193Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/005_breakthrough1/index.html</loc>
+    <lastmod>2025-12-17T04:42:45.196Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/004_tokenizers/index.html</loc>
+    <lastmod>2025-12-17T04:42:45.194Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/index.html</loc>
+    <lastmod>2025-12-17T04:42:45.182Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/000_test_post/index.html</loc>
+    <lastmod>2025-12-17T04:42:45.183Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/001_tokenization_dna_models/index.html</loc>
+    <lastmod>2025-12-17T04:42:45.192Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/002_information_theory_transformers/index.html</loc>
+    <lastmod>2025-12-17T04:42:45.193Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/006_breakthrough/index.html</loc>
+    <lastmod>2025-12-17T04:42:45.196Z</lastmod>
   </url>
 </urlset>
