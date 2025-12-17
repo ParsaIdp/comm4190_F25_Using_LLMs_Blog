@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Parsa Idehpour">
+<meta name="dcterms.date" content="2025-12-17">
+<meta name="description" content="Multimodal models are not just vision + language glued together. The design choices in how modalities interact determine what the model can do.">
+
+<title>Inside Vision-Language Models: Encoders, Adapters, and Emergent Capabilities – My Explorations with LLMs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Explorations with LLMs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Inside Vision-Language Models: Encoders, Adapters, and Emergent Capabilities</h1>
+                  <div>
+        <div class="description">
+          Multimodal models are not just vision + language glued together. The design choices in how modalities interact determine what the model can do.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">multimodal</div>
+                <div class="quarto-category">vision</div>
+                <div class="quarto-category">LLMs</div>
+                <div class="quarto-category">architecture</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Parsa Idehpour </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 17, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Vision-language models (VLMs) can describe images, answer questions about photographs, read documents, and solve visual puzzles. But how do they work? What architectural choices enable a language model to “see”? And what are the failure modes that reveal the limits of current approaches?</p>
+<p>This post unpacks the internals of VLMs: the vision encoders, the adaptation layers, and the training regimes that produce multimodal understanding.</p>
+<section id="vision-encoders-what-the-model-sees" class="level2">
+<h2 class="anchored" data-anchor-id="vision-encoders-what-the-model-sees">Vision Encoders: What the Model Sees</h2>
+<p>Before an LLM can process an image, the image must be converted into tokens. This is the job of the <strong>vision encoder</strong>.</p>
+<p><strong>Vision Transformer (ViT)</strong>: The dominant architecture. Split the image into patches (typically 14×14 or 16×16 pixels), embed each patch as a vector, add positional embeddings, and run through transformer layers. The output is a sequence of patch embeddings—one per spatial location.</p>
+<p><strong>CLIP (Contrastive Language-Image Pre-training)</strong>: Trained to align image and text embeddings using contrastive learning. Given image-caption pairs, CLIP learns to maximize similarity between matching pairs and minimize it for non-matching. The resulting vision encoder produces embeddings that are already somewhat aligned with language.</p>
+<p><strong>SigLIP</strong>: A variant of CLIP that uses sigmoid loss instead of softmax, enabling more efficient training on larger batches and producing better-calibrated embeddings.</p>
+<p><strong>DINOv2</strong>: Self-supervised vision encoder trained without text. Focuses purely on visual structure—produces embeddings useful for dense prediction tasks like segmentation.</p>
+<p>The choice of vision encoder affects what information is available to the language model. CLIP-based encoders emphasize semantic concepts aligned with language; DINOv2 emphasizes visual structure. Some models use both.</p>
+</section>
+<section id="fusion-strategies-how-modalities-meet" class="level2">
+<h2 class="anchored" data-anchor-id="fusion-strategies-how-modalities-meet">Fusion Strategies: How Modalities Meet</h2>
+<p>Given vision embeddings and a language model, how do you combine them? Several strategies exist:</p>
+<p><strong>Early fusion</strong>: Concatenate vision tokens directly with text tokens as input to the LLM. Simple but expensive—every forward pass processes all vision tokens through all layers.</p>
+<p><strong>Late fusion</strong>: Process modalities separately until final layers, then combine. Efficient but limits cross-modal interaction.</p>
+<p><strong>Cross-attention</strong>: Add cross-attention layers where text tokens attend to vision tokens (or vice versa). The LLM can selectively query visual information without processing all vision tokens through all layers.</p>
+<p><strong>Gated fusion</strong>: Learn gates that control how much visual information flows into the language model at each layer. Allows the model to ignore vision when it’s irrelevant.</p>
+<p>Most modern VLMs use some form of early fusion with an adapter layer that compresses or transforms vision tokens before they enter the LLM.</p>
+</section>
+<section id="adapter-modules-the-bridge-between-modalities" class="level2">
+<h2 class="anchored" data-anchor-id="adapter-modules-the-bridge-between-modalities">Adapter Modules: The Bridge Between Modalities</h2>
+<p>Vision encoders produce embeddings in their own space; LLMs expect tokens in their embedding space. The <strong>adapter</strong> bridges this gap.</p>
+<p><strong>Linear projection</strong>: The simplest approach—a learned linear layer that projects vision embeddings to the LLM’s hidden dimension. Used in LLaVA. Surprisingly effective.</p>
+<p><strong>MLP adapter</strong>: A small feedforward network (2-3 layers) with nonlinearity. Slightly more expressive than linear projection.</p>
+<p><strong>Q-Former (Querying Transformer)</strong>: Used in BLIP-2. A set of learnable query tokens attend to (frozen) vision encoder outputs through cross-attention, producing a fixed number of output tokens regardless of image size. This compresses visual information and learns what aspects are relevant for language.</p>
+<p><strong>Perceiver Resampler</strong>: Similar idea to Q-Former—use a small number of latent tokens to “summarize” the visual input through cross-attention. Used in Flamingo.</p>
+<p><strong>C-Abstractor and variants</strong>: Learn hierarchical abstractions, preserving some spatial structure while compressing token count.</p>
+<p>The number of visual tokens matters for efficiency. A 336×336 image at 14×14 patches produces 576 vision tokens. That’s a lot of context for the LLM. Adapters that reduce token count (Q-Former, Perceiver) trade off visual detail for efficiency.</p>
+</section>
+<section id="training-regimes" class="level2">
+<h2 class="anchored" data-anchor-id="training-regimes">Training Regimes</h2>
+<p>VLMs typically train in stages:</p>
+<p><strong>Stage 1: Vision-language alignment (pretraining)</strong> Freeze both vision encoder and LLM; only train the adapter. Use image-caption pairs. Goal: teach the adapter to project visual information into a form the LLM can use. This is cheap because most parameters are frozen.</p>
+<p><strong>Stage 2: Instruction tuning</strong> Unfreeze the LLM (and sometimes vision encoder). Train on visual instruction-following data: visual question-answering, image description, visual reasoning puzzles. Goal: teach the model to follow instructions about images.</p>
+<p><strong>Stage 3 (optional): RLHF or preference tuning</strong> Use human preferences to further refine outputs. Important for reducing hallucinations and improving helpfulness.</p>
+<p>The quality and diversity of training data at each stage heavily influences capabilities. Models trained primarily on natural images struggle with documents, charts, and diagrams. Models trained on clean web data may hallucinate about photos with unusual content.</p>
+</section>
+<section id="emergent-capabilities" class="level2">
+<h2 class="anchored" data-anchor-id="emergent-capabilities">Emergent Capabilities</h2>
+<p>Modern VLMs exhibit impressive capabilities that weren’t explicitly trained:</p>
+<p><strong>Visual reasoning</strong>: “How many apples are on the table?” “Which object is closer to the camera?” “What would happen if I pushed the ball?”</p>
+<p><strong>OCR and document understanding</strong>: Reading text in images, understanding tables, parsing receipts and forms.</p>
+<p><strong>Spatial reasoning</strong>: Understanding relative positions, following directions (“the object to the left of…”), parsing maps.</p>
+<p><strong>World knowledge grounding</strong>: Identifying landmarks, recognizing species, understanding cultural context.</p>
+<p><strong>Chart and graph interpretation</strong>: Extracting data from visualizations, answering questions about trends.</p>
+<p>These capabilities emerge from scale and diverse training data. No single supervision signal taught “chart reading”—it arose from exposure to many charts paired with textual descriptions.</p>
+</section>
+<section id="failure-modes" class="level2">
+<h2 class="anchored" data-anchor-id="failure-modes">Failure Modes</h2>
+<p>VLMs fail in characteristic ways that reveal their limitations:</p>
+<p><strong>Hallucination</strong>: Confidently describing objects or properties that aren’t in the image. “The woman is wearing a red hat” when there’s no hat. This is the most common and dangerous failure mode.</p>
+<p><strong>Object binding errors</strong>: Correctly identifying that there’s a red ball and a blue cube, but incorrectly stating “the ball is blue.” Visual properties get misattributed to wrong objects.</p>
+<p><strong>Counting failures</strong>: VLMs notoriously struggle with counting. “How many people are in the image?” often gets wrong answers, especially for larger numbers.</p>
+<p><strong>Positional confusion</strong>: Left/right, above/below, near/far relations are often unreliable. The model may understand “there are two objects” but not their spatial relationship.</p>
+<p><strong>Negation blindness</strong>: “Is there NOT a dog in the image?” is harder to answer reliably than “Is there a dog in the image?”</p>
+<p><strong>Fine-grained discrimination</strong>: Distinguishing similar breeds, species, or models. CLIP-style training emphasizes coarse categories over fine distinctions.</p>
+<p>These failures suggest that current VLMs don’t build robust internal representations of scene structure. They’re doing something more like sophisticated pattern matching on visual features plus language context.</p>
+</section>
+<section id="case-studies-current-models" class="level2">
+<h2 class="anchored" data-anchor-id="case-studies-current-models">Case Studies: Current Models</h2>
+<p><strong>LLaVA</strong>: Clean, open architecture. ViT (CLIP-pretrained) → linear projection → Vicuna/LLaMA. Shows that sophisticated adapters aren’t always necessary.</p>
+<p><strong>GPT-4V</strong>: Proprietary, likely uses a large ViT variant with substantial multimodal pretraining. Best-in-class on many benchmarks but expensive and closed.</p>
+<p><strong>Gemini</strong>: Trained natively multimodal from early stages (not a vision encoder bolted onto a language model). Interleaves modalities more fluidly.</p>
+<p><strong>Claude’s vision</strong>: Focuses on safety and reliability. Strong at document understanding and refusing problematic requests about images.</p>
+<p><strong>Qwen-VL, InternVL, CogVLM</strong>: Open-source models pushing various frontiers: resolution, efficiency, specialized capabilities.</p>
+<p>The landscape is moving fast. New models appear monthly, each with different trade-offs between capability, efficiency, and openness.</p>
+</section>
+<section id="implementation-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="implementation-considerations">Implementation Considerations</h2>
+<p>If you’re working with VLMs, keep in mind:</p>
+<p><strong>Resolution matters</strong>: Higher resolution preserves more detail but increases cost (quadratic in resolution for attention). Many models use multi-resolution strategies—process at low res first, then zoom in on regions of interest.</p>
+<p><strong>Aspect ratio handling</strong>: Images aren’t all squares. Naive resizing distorts content. Better approaches: pad, crop, or tile into multiple regions.</p>
+<p><strong>Video</strong>: Extend to video by sampling frames and treating each as an image. Challenges: temporal reasoning, long-context efficiency, computing over many frames.</p>
+<p><strong>Multiple images</strong>: Some VLMs handle multiple images per query; others struggle. Important for comparison tasks, before/after, or document processing.</p>
+<p><strong>Prompt engineering for vision</strong>: Just like text, how you phrase visual questions matters. Being specific, asking for step-by-step reasoning, and providing context improves performance.</p>
+</section>
+<section id="where-this-is-heading" class="level2">
+<h2 class="anchored" data-anchor-id="where-this-is-heading">Where This Is Heading</h2>
+<p>Several trends are shaping the future of VLMs:</p>
+<p><strong>Native multimodal training</strong>: Instead of adapting language models to vision, train on interleaved images and text from the start. Gemini and Chameleon point this direction.</p>
+<p><strong>More modalities</strong>: Audio, 3D, video, embodied sensors. The same architectural patterns extend.</p>
+<p><strong>Agentic capabilities</strong>: VLMs that can interact with GUIs, browse the web, and manipulate visual environments.</p>
+<p><strong>Specialized vision</strong>: Domain-specific models for medical imaging, satellite imagery, scientific figures.</p>
+<p><strong>Efficiency</strong>: Making VLMs fast and cheap enough for edge deployment.</p>
+<p>Vision-language models represent a significant step toward AI systems that perceive and reason about the world as humans do. Understanding how they work—and where they fail—is essential for using them effectively.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ParsaIdp\.github\.io\/comm4190_F25_Using_LLMs_Blog\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Parsa Idehpour">
+<meta name="dcterms.date" content="2025-12-17">
+<meta name="description" content="AI capability is gated by compute, and compute supply chains are geopolitically constrained. Understanding infrastructure economics is essential.">
+
+<title>The GPU Economy: Understanding AI Infrastructure as a Strategic Asset – My Explorations with LLMs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Explorations with LLMs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">The GPU Economy: Understanding AI Infrastructure as a Strategic Asset</h1>
+                  <div>
+        <div class="description">
+          AI capability is gated by compute, and compute supply chains are geopolitically constrained. Understanding infrastructure economics is essential.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">economics</div>
+                <div class="quarto-category">infrastructure</div>
+                <div class="quarto-category">compute</div>
+                <div class="quarto-category">geopolitics</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Parsa Idehpour </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 17, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Behind every AI capability is a stack of silicon. GPUs, TPUs, and custom AI accelerators are the physical substrate that makes training and inference possible. Understanding the economics of this infrastructure—who builds it, who controls supply, what it costs—is essential for understanding AI’s trajectory.</p>
+<section id="the-chip-supply-chain" class="level2">
+<h2 class="anchored" data-anchor-id="the-chip-supply-chain">The Chip Supply Chain</h2>
+<p>The production of AI chips involves one of the most complex supply chains humans have ever built:</p>
+<p><strong>Design</strong>: Companies like NVIDIA, AMD, and Google design chip architectures without owning fabrication facilities (“fabless”). NVIDIA designs; someone else manufactures. This requires massive R&amp;D investment and years of development per generation.</p>
+<p><strong>Fabrication</strong>: Taiwan Semiconductor Manufacturing Company (TSMC) produces ~90% of the world’s most advanced chips. Samsung is a distant second. Intel is trying to catch up. This concentration creates extreme supply chain risk.</p>
+<p><strong>Equipment</strong>: The machines that make chips are even more concentrated. ASML (Netherlands) is the sole supplier of EUV lithography machines—the tools that print features at the 7nm scale and below. Without ASML, no one makes cutting-edge chips.</p>
+<p><strong>Packaging and assembly</strong>: Advanced packaging (stacking dies, chiplet architectures) happens at TSMC and specialized facilities. This is increasingly the integration point for AI systems.</p>
+<p><strong>End systems</strong>: Cloud providers (AWS, Google Cloud, Azure) and AI labs (OpenAI, Anthropic, DeepMind) assemble chips into datacenters and provide services.</p>
+<p>The result: a small number of chokepoints control global AI compute capacity.</p>
+</section>
+<section id="gpu-scarcity" class="level2">
+<h2 class="anchored" data-anchor-id="gpu-scarcity">GPU Scarcity</h2>
+<p>In 2023-2024, NVIDIA’s H100 GPUs became famously difficult to obtain. Waiting lists stretched months. Prices spiked. Why?</p>
+<p><strong>Demand surge</strong>: ChatGPT demonstrated that LLMs were ready for prime time. Everyone wanted to train their own. Demand for training compute spiked.</p>
+<p><strong>Supply constraints</strong>: Fabrication capacity is limited. TSMC can only produce so many wafers. NVIDIA prioritized its most profitable customers.</p>
+<p><strong>Hoarding</strong>: Companies bought more than they immediately needed to secure future supply. This amplified scarcity.</p>
+<p><strong>Lead times</strong>: Building fab capacity takes 3-5 years. Supply can’t respond quickly to demand spikes.</p>
+<p>The scarcity was real, not artificial. NVIDIA’s market cap reflects genuine pricing power when supply is constrained.</p>
+<p>Implications for AI development: - <strong>Rich get richer</strong>: Well-funded labs train larger models. Compute-poor researchers fall behind. - <strong>Cloud concentration</strong>: Access to compute flows through a few large cloud providers. - <strong>Innovation bottlenecks</strong>: Ideas that require large-scale experiments wait in line for resources.</p>
+</section>
+<section id="training-cost-scaling" class="level2">
+<h2 class="anchored" data-anchor-id="training-cost-scaling">Training Cost Scaling</h2>
+<p>How much does it cost to train a frontier model?</p>
+<p><strong>Rough estimates</strong>: - GPT-4-class models: $50-100 million in compute - Gemini Ultra: likely similar or higher - Claude 3.5: undisclosed but comparable</p>
+<p>These costs are dominated by GPU-hours. A training run might use 10,000+ H100s for months.</p>
+<p><strong>Chinchilla scaling laws</strong>: For a given compute budget, there’s an optimal split between model size and training tokens. Earlier we overinvested in parameters; now we train smaller models longer. This affects the compute profile but not the total cost.</p>
+<p><strong>FLOP budgets</strong>: Training compute is often measured in floating-point operations. GPT-3 was ~3.6 × 10²³ FLOPs. GPT-4 is estimated at 10²⁵ FLOPs or higher. Each generation is 10-100× more expensive.</p>
+<p>At some point, training costs become prohibitive for most organizations. Only well-funded labs can afford to train frontier models from scratch.</p>
+</section>
+<section id="inference-economics" class="level2">
+<h2 class="anchored" data-anchor-id="inference-economics">Inference Economics</h2>
+<p>Training happens once; inference happens every time someone uses the model. As models deploy to millions of users, inference costs dominate.</p>
+<p><strong>Cost per token</strong>: Depends on model size, hardware, and optimization. GPT-4 costs ~$0.03/1K input tokens, $0.06/1K output tokens (API pricing, which includes margin). Open-source models on self-hosted hardware can be 10-100× cheaper.</p>
+<p><strong>Throughput vs.&nbsp;latency</strong>: Batching multiple requests together is efficient (high throughput) but adds latency. Real-time chat needs low latency and sacrifices efficiency.</p>
+<p><strong>Quantization and optimization</strong>: Reducing precision (FP16 → INT8 → INT4) shrinks model size and speeds inference. Distillation creates smaller, faster models. These techniques trade some quality for major efficiency gains.</p>
+<p><strong>Inference chips</strong>: NVIDIA GPUs are great at training but not necessarily optimal for inference. Specialized inference chips (NVIDIA T4, custom ASICs, AWS Inferentia) optimize for cost-per-query.</p>
+<p>The inference cost structure matters for business models. Products that use expensive models on long contexts need to charge accordingly or find efficiency gains.</p>
+</section>
+<section id="cloud-vs.-on-prem" class="level2">
+<h2 class="anchored" data-anchor-id="cloud-vs.-on-prem">Cloud vs.&nbsp;On-Prem</h2>
+<p>Where does AI compute run?</p>
+<p><strong>Hyperscalers (AWS, Azure, GCP)</strong>: Most training and inference runs on cloud infrastructure. Benefits: scale on demand, no capex, managed services. Costs: higher unit prices, vendor lock-in, data egress fees.</p>
+<p><strong>Specialized AI clouds (Lambda Labs, CoreWeave, Together)</strong>: Focus on GPU availability and AI-specific services. Often more competitive pricing for pure compute.</p>
+<p><strong>On-prem and self-hosted</strong>: Large enterprises and research institutions increasingly build their own GPU clusters. Benefits: control, customization, data sovereignty. Costs: capex, operations, utilization risk.</p>
+<p><strong>Edge deployment</strong>: Running small models on devices (phones, laptops, robots). Latency-sensitive or offline applications. Severely constrained by device thermal and power limits.</p>
+<p>The trend is bifurcation: massive training runs on hyperscale clouds; inference increasingly distributed to specialized providers and edge devices.</p>
+</section>
+<section id="energy-constraints" class="level2">
+<h2 class="anchored" data-anchor-id="energy-constraints">Energy Constraints</h2>
+<p>AI datacenters use enormous amounts of power, and the problem is getting worse:</p>
+<p><strong>Power density</strong>: A rack of H100 GPUs uses 10-20kW. A large AI cluster might use hundreds of megawatts—the output of a small power plant.</p>
+<p><strong>Cooling</strong>: Most datacenter energy goes to cooling, not compute. Liquid cooling is increasingly necessary for high-density GPU racks.</p>
+<p><strong>Location matters</strong>: Cheap power and cool climates attract AI infrastructure. Nordic countries, the Pacific Northwest, and locations near hydropower are popular.</p>
+<p><strong>Carbon implications</strong>: Unless powered by renewables, AI training has significant carbon footprint. Large training runs can emit as much CO2 as hundreds of flights.</p>
+<p>Power availability is becoming a constraint on datacenter construction. In some regions, there simply isn’t enough grid capacity for proposed AI facilities.</p>
+</section>
+<section id="geopolitics" class="level2">
+<h2 class="anchored" data-anchor-id="geopolitics">Geopolitics</h2>
+<p>The concentration of chip supply chains creates geopolitical vulnerabilities:</p>
+<p><strong>Taiwan risk</strong>: TSMC’s fabrication facilities are in Taiwan. A Chinese invasion or blockade would devastate global chip supply. The US, Japan, and Europe are investing heavily to diversify, but new fabs take years.</p>
+<p><strong>Export controls</strong>: The US restricts export of advanced chips and chip-making equipment to China. This limits China’s ability to train frontier models and slows their AI development—at least for now.</p>
+<p><strong>CHIPS Act</strong>: The US is investing $52B to rebuild domestic semiconductor manufacturing. Intel, TSMC, and Samsung are building fabs on US soil. But these take 3-5 years to complete.</p>
+<p><strong>China’s response</strong>: China is investing heavily in domestic alternatives. Huawei’s Ascend chips, SMIC’s fabrication capabilities. They’re behind but working to close the gap.</p>
+<p>The AI compute supply chain is one of the most strategically significant industrial bases in the world. Governments treat it accordingly.</p>
+</section>
+<section id="future-compute" class="level2">
+<h2 class="anchored" data-anchor-id="future-compute">Future Compute</h2>
+<p>Several trends may change the compute landscape:</p>
+<p><strong>Algorithmic efficiency</strong>: Moore’s Law has slowed, but algorithmic improvements continue. Better architectures, training methods, and representations can achieve the same capability with less compute. This is “software eating hardware.”</p>
+<p><strong>Sparsity</strong>: Most neural network weights are unnecessary for any given input. Sparse models activate only relevant subsets, dramatically reducing compute. Mixture-of-experts is one form of this.</p>
+<p><strong>Alternative hardware</strong>: Photonic computing, neuromorphic chips, and analog computing offer potential for more efficient inference. Still nascent but under active development.</p>
+<p><strong>Quantum computing</strong>: Theoretical advantages for some problems, but no near-term impact on the main workloads (transformers, diffusion). Quantum machine learning is mostly hype so far.</p>
+<p>The most likely scenario: continued GPU/TPU improvement + algorithmic efficiency gains, with specialized accelerators for specific applications.</p>
+</section>
+<section id="implications" class="level2">
+<h2 class="anchored" data-anchor-id="implications">Implications</h2>
+<p>Understanding AI infrastructure economics matters for:</p>
+<p><strong>Researchers</strong>: Access to compute shapes what’s possible to study. Know the economics of your cloud provider.</p>
+<p><strong>Startups</strong>: Compute costs are a major expense. Efficiency is a competitive advantage. Don’t assume you can just throw money at the problem.</p>
+<p><strong>Investors</strong>: The “picks and shovels” of AI (NVIDIA, TSMC, datacenter REITs) have been fantastic investments. The question is whether this persists.</p>
+<p><strong>Policymakers</strong>: Compute supply chains are strategic. Export controls, subsidies, and supply chain resilience are legitimate policy concerns.</p>
+<p><strong>Everyone</strong>: The physical infrastructure underlying AI determines who can build powerful systems. It’s not just about software.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ParsaIdp\.github\.io\/comm4190_F25_Using_LLMs_Blog\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

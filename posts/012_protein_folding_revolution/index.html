@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Parsa Idehpour">
+<meta name="dcterms.date" content="2025-12-17">
+<meta name="description" content="AlphaFold represents one of the clearest wins for AI in science. Understanding how it works illuminates the future of AI-for-science.">
+
+<title>AlphaFold and Beyond: How AI Solved Protein Structure Prediction – My Explorations with LLMs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Explorations with LLMs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">AlphaFold and Beyond: How AI Solved Protein Structure Prediction</h1>
+                  <div>
+        <div class="description">
+          AlphaFold represents one of the clearest wins for AI in science. Understanding how it works illuminates the future of AI-for-science.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">biology</div>
+                <div class="quarto-category">AI-for-science</div>
+                <div class="quarto-category">structural-biology</div>
+                <div class="quarto-category">deep-learning</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Parsa Idehpour </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 17, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>In December 2020, AlphaFold 2 demonstrated protein structure prediction accuracy rivaling experimental methods. This was a genuine scientific breakthrough—the kind where a problem that had resisted decades of effort suddenly yields. Understanding how AlphaFold works, and what it means, offers lessons for how AI might transform other areas of science.</p>
+<section id="the-protein-folding-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-protein-folding-problem">The Protein Folding Problem</h2>
+<p>Proteins are chains of amino acids that fold into 3D structures. The structure determines function: enzymes catalyze reactions because their shapes fit substrates; antibodies recognize pathogens by shape complementarity; ion channels open and close through conformational changes.</p>
+<p>The folding problem: given a sequence of amino acids, predict the 3D structure. This matters because:</p>
+<ul>
+<li><strong>Experimental structure determination is slow and expensive.</strong> X-ray crystallography, cryo-EM, and NMR can take months to years per structure.</li>
+<li><strong>Most proteins have no known structure.</strong> Over 200 million protein sequences are known; fewer than 200,000 have experimental structures.</li>
+<li><strong>Structure enables function prediction.</strong> If you know the shape, you can infer binding sites, mechanisms, and drug targets.</li>
+</ul>
+<section id="levinthals-paradox" class="level3">
+<h3 class="anchored" data-anchor-id="levinthals-paradox">Levinthal’s Paradox</h3>
+<p>Cyrus Levinthal pointed out in 1969 that proteins can’t fold by random search. Even a small protein has ~10^300 possible conformations. If a protein sampled a new conformation every picosecond, it would take longer than the age of the universe to find the right one by chance.</p>
+<p>Yet proteins fold in milliseconds to seconds. This means the folding process follows an energy landscape that guides the chain toward the native structure. The physics is tractable, even if the search space is vast.</p>
+<p>Traditional computational approaches tried to exploit this physics—molecular dynamics, energy minimization, fragment assembly. They made progress but never achieved experimental accuracy across diverse proteins.</p>
+</section>
+</section>
+<section id="how-alphafold-works" class="level2">
+<h2 class="anchored" data-anchor-id="how-alphafold-works">How AlphaFold Works</h2>
+<p>AlphaFold 2 takes a sequence and predicts the 3D coordinates of every atom. The key insight: it treats structure prediction as a pattern recognition problem, learning from evolutionary relationships.</p>
+<section id="multiple-sequence-alignments-msas" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-sequence-alignments-msas">Multiple Sequence Alignments (MSAs)</h3>
+<p>The input isn’t just the target sequence. AlphaFold retrieves related sequences from protein databases and aligns them. This <strong>multiple sequence alignment (MSA)</strong> contains evolutionary information:</p>
+<ul>
+<li>Residues that contact each other in 3D tend to co-evolve (if one mutates, the other compensates)</li>
+<li>Conserved residues are often structurally important</li>
+<li>Insertion/deletion patterns reveal flexible regions</li>
+</ul>
+<p>MSAs encode enormous implicit knowledge about structure. Two residues that frequently co-vary are likely spatially close. This “covariance signal” has been exploited for years, but AlphaFold learned to use it far more effectively.</p>
+</section>
+<section id="the-evoformer-attention-over-msa-and-structure" class="level3">
+<h3 class="anchored" data-anchor-id="the-evoformer-attention-over-msa-and-structure">The Evoformer: Attention over MSA and Structure</h3>
+<p>AlphaFold’s core is the <strong>Evoformer</strong>—a novel architecture that processes two representations simultaneously:</p>
+<ol type="1">
+<li><strong>MSA representation</strong>: Each row is a sequence; each column is a position. Contains alignment information.</li>
+<li><strong>Pair representation</strong>: Encodes relationships between every pair of residues. Contains inferred distance/contact information.</li>
+</ol>
+<p>The Evoformer uses attention mechanisms to iteratively refine these representations: - Row-wise attention: Let sequences “compare notes” about each position - Column-wise attention: Let positions “compare notes” across sequences - Pair updates: Use MSA patterns to infer pairwise relationships - Triangle attention: Enforce consistency in the pair representation (if A is close to B and B is close to C, that constrains A-C)</p>
+<p>After many layers of this, the pair representation contains rich information about spatial relationships.</p>
+</section>
+<section id="structure-module-from-representation-to-3d-coordinates" class="level3">
+<h3 class="anchored" data-anchor-id="structure-module-from-representation-to-3d-coordinates">Structure Module: From Representation to 3D Coordinates</h3>
+<p>The <strong>structure module</strong> takes the Evoformer outputs and produces 3D coordinates. It represents each residue as a local coordinate frame (position + orientation) and iteratively refines these frames.</p>
+<p>Key innovations: - <strong>Invariant Point Attention (IPA)</strong>: Attention that respects 3D geometry. Queries, keys, and values include spatial information. - <strong>Iterative refinement</strong>: The structure module runs multiple times, each pass improving the prediction. - <strong>Recycling</strong>: The entire network can run multiple passes, with previous outputs fed back as inputs.</p>
+<p>The output includes predicted coordinates for all backbone atoms (N, Cα, C) and side chains, plus a confidence score (pLDDT) per residue.</p>
+</section>
+<section id="training-learn-from-known-structures" class="level3">
+<h3 class="anchored" data-anchor-id="training-learn-from-known-structures">Training: Learn from Known Structures</h3>
+<p>AlphaFold was trained on ~170,000 experimental structures from the Protein Data Bank (PDB). The loss functions include: - Frame-aligned point error (FAPE): Measures accuracy in local coordinate frames - Distance matrix similarity: Ensures pairwise distances match the target - Confidence calibration: Ensure pLDDT scores correlate with actual accuracy</p>
+<p>The training is computationally intensive—equivalent to hundreds of thousands of GPU-hours. But once trained, prediction is fast: a few minutes per sequence on modest hardware.</p>
+</section>
+</section>
+<section id="single-sequence-methods-esmfold" class="level2">
+<h2 class="anchored" data-anchor-id="single-sequence-methods-esmfold">Single-Sequence Methods: ESMFold</h2>
+<p>AlphaFold requires MSAs, which are slow to compute and sometimes unavailable (for orphan proteins with few homologs). <strong>ESMFold</strong> from Meta AI takes a different approach:</p>
+<ul>
+<li>Use a large protein language model (ESM-2) pretrained on protein sequences</li>
+<li>The language model implicitly learns evolutionary patterns</li>
+<li>Fine-tune a structure prediction head on top</li>
+</ul>
+<p>ESMFold is much faster (no MSA search) and nearly as accurate for proteins with good language model representations. It demonstrates that large-scale language modeling on biological sequences captures structural information.</p>
+</section>
+<section id="alphafold-3-beyond-proteins" class="level2">
+<h2 class="anchored" data-anchor-id="alphafold-3-beyond-proteins">AlphaFold 3: Beyond Proteins</h2>
+<p>AlphaFold 3 (2024) extends to: - <strong>Protein-ligand complexes</strong>: Predicting how small molecules bind to proteins - <strong>Nucleic acids</strong>: DNA and RNA structures - <strong>Protein-protein complexes</strong>: Multi-chain assemblies - <strong>Post-translational modifications</strong>: Predicting how modifications affect structure</p>
+<p>The key innovation: a <strong>diffusion model</strong> for structure generation. Instead of direct coordinate prediction, AlphaFold 3 learns to denoise noisy structures—similar to how image diffusion models work. This allows more flexibility in handling different molecular types and enables confidence estimation through sampling.</p>
+</section>
+<section id="limitations-and-open-problems" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-and-open-problems">Limitations and Open Problems</h2>
+<p>AlphaFold is transformative but not omniscient:</p>
+<p><strong>Dynamics</strong>: Proteins aren’t static. They flex, breathe, and transition between conformational states. AlphaFold predicts one structure (usually the lowest-energy state), not the ensemble of structures a protein explores.</p>
+<p><strong>Disordered regions</strong>: Many proteins have intrinsically disordered regions that don’t adopt stable structures. AlphaFold often produces low-confidence predictions for these, which is the right behavior but not a solution.</p>
+<p><strong>Membrane proteins</strong>: Proteins embedded in lipid membranes present challenges. The membrane environment isn’t modeled, and membrane protein structures are underrepresented in training data.</p>
+<p><strong>Rare folds</strong>: Proteins with unusual folds or few evolutionary relatives may have weaker MSAs and worse predictions.</p>
+<p><strong>Conformational changes upon binding</strong>: How proteins change shape when binding partners or substrates is often critical for function but hard to predict without knowing the binding partner.</p>
+</section>
+<section id="impact-on-science" class="level2">
+<h2 class="anchored" data-anchor-id="impact-on-science">Impact on Science</h2>
+<p>AlphaFold’s release (both the model and a database of 200+ million predicted structures) has transformed structural biology:</p>
+<p><strong>Drug discovery</strong>: Predicted structures enable virtual screening and structure-based drug design for targets without experimental structures. Timelines are compressed.</p>
+<p><strong>Enzyme engineering</strong>: Engineers can predict how mutations affect structure and design enzymes with new properties.</p>
+<p><strong>Understanding disease</strong>: Mutations that cause disease often do so by disrupting protein structure. Predicted structures help interpret genetic variants.</p>
+<p><strong>Evolutionary biology</strong>: Structure predictions across entire proteomes enable comparative analysis of evolutionary relationships.</p>
+<p><strong>Experimental biology</strong>: Even when experimental structures are needed, predictions guide experiments, reducing search space and providing starting models.</p>
+</section>
+<section id="lessons-for-ai-for-science" class="level2">
+<h2 class="anchored" data-anchor-id="lessons-for-ai-for-science">Lessons for AI-for-Science</h2>
+<p>What made AlphaFold succeed where others didn’t?</p>
+<ol type="1">
+<li><p><strong>Rich prior knowledge</strong>: MSAs encode billions of years of evolution. AlphaFold learned to extract this signal.</p></li>
+<li><p><strong>Inductive biases that match the problem</strong>: Triangle attention, IPA, and coordinate frames are designed for spatial reasoning about 3D structures.</p></li>
+<li><p><strong>High-quality data</strong>: The PDB is a curated database of experimental structures accumulated over decades.</p></li>
+<li><p><strong>End-to-end learning</strong>: Rather than pipelining separate components (predict contacts → assemble structure), AlphaFold learns everything jointly.</p></li>
+<li><p><strong>Scale</strong>: Both model size and compute were substantial. This is expensive science.</p></li>
+</ol>
+<p>These lessons generalize. AI-for-science works best when: data is abundant and curated, the problem has exploitable structure, and architectural choices respect domain knowledge.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ParsaIdp\.github\.io\/comm4190_F25_Using_LLMs_Blog\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

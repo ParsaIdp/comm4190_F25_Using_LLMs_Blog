@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Parsa Idehpour">
+<meta name="dcterms.date" content="2025-12-17">
+<meta name="description" content="Automation doesn’t simply delete jobs—it reshapes task bundles, changes comparative advantage, and creates new work. The details matter more than the headlines.">
+
+<title>The Automation Equation: AI, Labor, and the Future of Work – My Explorations with LLMs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Explorations with LLMs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">The Automation Equation: AI, Labor, and the Future of Work</h1>
+                  <div>
+        <div class="description">
+          Automation doesn’t simply delete jobs—it reshapes task bundles, changes comparative advantage, and creates new work. The details matter more than the headlines.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">economics</div>
+                <div class="quarto-category">AI-impact</div>
+                <div class="quarto-category">labor</div>
+                <div class="quarto-category">policy</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Parsa Idehpour </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 17, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Every wave of automation triggers the same debate: will machines take all the jobs? The answer has historically been “no”—employment has grown alongside technological progress. But generative AI feels different. It’s targeting cognitive work, the tasks that remained safely human as physical labor was mechanized. Are we approaching a genuine discontinuity, or is this another cycle of disruption and adaptation?</p>
+<section id="task-based-frameworks" class="level2">
+<h2 class="anchored" data-anchor-id="task-based-frameworks">Task-Based Frameworks</h2>
+<p>The most useful mental model for thinking about automation comes from labor economics: <strong>jobs are bundles of tasks</strong>.</p>
+<p>David Autor’s framework distinguishes: - <strong>Routine tasks</strong>: Predictable, rule-following activities that can be codified. Clerical work, assembly line steps. - <strong>Non-routine manual tasks</strong>: Physical activities requiring flexibility and sensorimotor skill. Janitorial work, construction. - <strong>Non-routine cognitive tasks</strong>: Abstract reasoning, creativity, interpersonal interaction. Management, medicine, art.</p>
+<p>Traditional automation (pre-AI) attacked routine tasks. Assembly robots replaced repetitive manufacturing. Software replaced clerical processing. This led to <strong>job polarization</strong>: growth in high-skill cognitive jobs and low-skill manual jobs, with the middle hollowed out.</p>
+<p>AI is different because it attacks non-routine cognitive tasks. It writes, codes, analyzes, and creates. This changes which parts of the task distribution are vulnerable.</p>
+</section>
+<section id="complementarity-vs.-substitution" class="level2">
+<h2 class="anchored" data-anchor-id="complementarity-vs.-substitution">Complementarity vs.&nbsp;Substitution</h2>
+<p>When a technology affects a task, two outcomes are possible:</p>
+<p><strong>Substitution</strong>: The technology replaces human labor. Demand for humans doing that task falls.</p>
+<p><strong>Complementarity</strong>: The technology amplifies human productivity. Demand for humans doing that task rises because each worker is more valuable.</p>
+<p>The same technology can have different effects on different tasks, even within the same job.</p>
+<p>Consider a radiologist. AI might substitute for “read scans for common abnormalities” (AI can do this) while complementing “communicate with patients” and “handle unusual cases” (AI provides decision support but humans remain essential). The net effect on radiologist employment depends on which tasks dominate the work.</p>
+<p>Historical examples show both patterns: - <strong>ATMs and bank tellers</strong>: ATMs substituted for cash dispensing, reducing tellers per branch. But cheaper branches increased total branches, and remaining tellers shifted to customer service. Net employment was roughly flat. - <strong>Spreadsheets and accountants</strong>: Spreadsheets made accounting tasks faster, reducing the labor needed per task. But lower costs increased demand for accounting services. More accountants are employed now than before spreadsheets.</p>
+<p>The lesson: automation of tasks doesn’t directly map to automation of jobs. It depends on demand elasticity, task bundling, and whether technology is primarily complementary or substitutive.</p>
+</section>
+<section id="what-tasks-are-actually-automatable" class="level2">
+<h2 class="anchored" data-anchor-id="what-tasks-are-actually-automatable">What Tasks Are Actually Automatable?</h2>
+<p>With generative AI, we can assess task-level exposure more concretely:</p>
+<p><strong>Highly exposed tasks</strong>: - Writing first drafts (emails, reports, documentation) - Code generation for well-specified problems - Data analysis on structured datasets - Customer service for routine queries - Translation and summarization</p>
+<p><strong>Partially exposed tasks</strong>: - Creative work (AI assists but human judgment remains central) - Research and analysis (AI gathers information; humans evaluate and integrate) - Complex coding (AI accelerates but doesn’t replace expert programmers)</p>
+<p><strong>Less exposed tasks</strong>: - Physical manipulation with hands (robotics lags language AI) - High-stakes personal interaction (therapy, negotiation, management) - Tasks requiring genuine understanding of novel situations - Tasks requiring legal or ethical accountability (humans must remain “in the loop”)</p>
+<p>GPT-4 and similar models have been estimated to expose 80% of workers to some degree (at least some of their tasks are affected) and 19% at high exposure (most of their tasks are affected).</p>
+</section>
+<section id="wage-effects" class="level2">
+<h2 class="anchored" data-anchor-id="wage-effects">Wage Effects</h2>
+<p>Even if total employment stays constant, automation can dramatically change who gets paid what.</p>
+<p><strong>Skill premium</strong>: If AI complements high-skill workers more than it substitutes for them, the returns to skill increase. Experts who can use AI effectively become even more valuable.</p>
+<p><strong>Hollowing out</strong>: If AI substitutes for middle-skill work while complementing both high-skill and low-skill work, the middle hollows out. This was the pattern of previous automation waves.</p>
+<p><strong>Superstar economics</strong>: If AI enables the best workers to scale their impact (the best consultant can now serve 10× as many clients), winner-take-all dynamics intensify. The top 1% pull away.</p>
+<p><strong>Wage compression</strong>: Alternatively, if AI makes previously rare skills abundant (everyone can now write competently), the premium for those skills drops. This benefits consumers but hurts previous specialists.</p>
+<p>Early evidence is mixed. Some studies show LLMs reducing performance gaps between workers—AI boosts inexperienced workers more than experts. This could equalize outcomes. But other studies show experts using AI to widen their lead. We’re too early to know which pattern dominates.</p>
+</section>
+<section id="labor-supply-responses" class="level2">
+<h2 class="anchored" data-anchor-id="labor-supply-responses">Labor Supply Responses</h2>
+<p>Workers aren’t passive. They adapt:</p>
+<p><strong>Retraining</strong>: Workers can learn new skills to stay ahead of automation. But retraining is costly, takes time, and doesn’t work for everyone. Older workers and those without educational access face higher barriers.</p>
+<p><strong>Job switching</strong>: Workers shift to roles that are less automatable. Customer service → sales → relationship management. The question is whether there are enough destination jobs.</p>
+<p><strong>Entrepreneurship</strong>: New technology creates opportunities for new businesses. Some displaced workers become founders.</p>
+<p><strong>Labor force exit</strong>: Some workers retire early, take disability, or drop out entirely. This is often invisible in employment statistics but represents real human cost.</p>
+<p>The speed of adjustment matters. Slow automation allows gradual adaptation through normal career evolution. Fast automation creates displacement that labor markets struggle to absorb.</p>
+</section>
+<section id="new-job-creation" class="level2">
+<h2 class="anchored" data-anchor-id="new-job-creation">New Job Creation</h2>
+<p>Every automation wave creates new jobs that didn’t exist before. We can already see this with AI:</p>
+<ul>
+<li><strong>Prompt engineers</strong>: Specialists in getting good outputs from language models</li>
+<li><strong>AI trainers</strong>: Human evaluators providing feedback for RLHF</li>
+<li><strong>AI ethicists and safety researchers</strong>: Ensuring AI systems behave well</li>
+<li><strong>Integration specialists</strong>: Connecting AI capabilities to business processes</li>
+<li><strong>Content moderators for AI output</strong>: Reviewing and filtering AI-generated content</li>
+</ul>
+<p>But the key question is <strong>scale</strong>: do new jobs absorb displaced workers? Historical evidence suggests yes over long time horizons. But transitions can be painful for a generation.</p>
+<p>The optimistic scenario: AI handling routine cognitive tasks frees humans for more creative, interpersonal, and judgment-intensive work. Demand for human work shifts but doesn’t disappear.</p>
+<p>The pessimistic scenario: Automation proceeds faster than adaptation. Labor markets experience sustained unemployment or underemployment while adjustment slowly occurs.</p>
+</section>
+<section id="policy-responses" class="level2">
+<h2 class="anchored" data-anchor-id="policy-responses">Policy Responses</h2>
+<p>If AI creates significant labor market disruption, what interventions make sense?</p>
+<p><strong>Universal Basic Income (UBI)</strong>: Provide everyone a basic income regardless of employment. Ensures baseline security. Concerns: expensive, may reduce work incentives, doesn’t address meaning and purpose that work provides.</p>
+<p><strong>Wage insurance</strong>: Top up wages for displaced workers who take lower-paying jobs. Smooths transitions without full UBI costs.</p>
+<p><strong>Education reform</strong>: Invest in skills that complement AI rather than compete with it. Creativity, critical thinking, emotional intelligence, technical fluency.</p>
+<p><strong>Job guarantees</strong>: Government as employer of last resort. Ensures everyone who wants work can find it. Questions about what jobs and at what cost.</p>
+<p><strong>Taxation of AI</strong>: Tax capital (robots, AI systems) to fund labor support. Slows adoption while providing resources for adjustment. Risk: reduces productivity gains.</p>
+<p><strong>Reduced work time</strong>: If less human labor is needed, share it differently. Shorter work weeks, longer vacations, later career entry. Cultural and economic barriers.</p>
+<p>There’s no consensus on the right mix. Different values lead to different conclusions.</p>
+</section>
+<section id="what-early-evidence-shows" class="level2">
+<h2 class="anchored" data-anchor-id="what-early-evidence-shows">What Early Evidence Shows</h2>
+<p>We’re still in early days, but some data is emerging:</p>
+<p><strong>Customer service</strong>: Companies report 15-30% productivity gains with LLM assistance. Some are reducing headcount; others are maintaining headcount at higher output.</p>
+<p><strong>Programming</strong>: GitHub Copilot users report faster completion of routine coding tasks. Senior engineers seem to benefit less than juniors. Companies are experimenting with smaller teams doing more.</p>
+<p><strong>Content creation</strong>: Copywriting, marketing, and basic journalism are seeing rapid AI integration. Human roles shift toward editing, strategy, and judgment.</p>
+<p><strong>Legal and consulting</strong>: Firms are using AI for research, drafting, and analysis. Total employment effects unclear so far.</p>
+<p>It’s too early to draw strong conclusions about net employment effects. The capability is there; adoption is proceeding; but labor market outcomes take years to fully materialize.</p>
+</section>
+<section id="my-take" class="level2">
+<h2 class="anchored" data-anchor-id="my-take">My Take</h2>
+<p>The most likely scenario is not mass unemployment but significant reshuffling. Many jobs will change substantially. Some will disappear; others will emerge. The transition will create both opportunities and hardship.</p>
+<p>What concerns me is not the long run—humans have always found new ways to be useful—but the transition speed. If AI capabilities advance faster than labor markets can adapt, we face a period of painful adjustment. How that adjustment is managed (or not) will determine whether AI’s economic benefits are broadly shared or concentrated.</p>
+<p>The headlines about “AI taking all jobs” are probably wrong. The headlines about “nothing will change” are definitely wrong. The truth is messier, context-dependent, and politically contested. That makes it harder to write about but more important to understand.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ParsaIdp\.github\.io\/comm4190_F25_Using_LLMs_Blog\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

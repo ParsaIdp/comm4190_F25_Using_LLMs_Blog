@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Parsa Idehpour">
+<meta name="dcterms.date" content="2025-12-17">
+<meta name="description" content="Pure neural models hallucinate; pure symbolic systems are brittle. The best of both worlds requires principled integration.">
+
+<title>Neural + Symbolic: Why Hybrid Systems Might Be the Next Frontier – My Explorations with LLMs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0b37c64f34216b628666a8dac638b53b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Explorations with LLMs</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Neural + Symbolic: Why Hybrid Systems Might Be the Next Frontier</h1>
+                  <div>
+        <div class="description">
+          Pure neural models hallucinate; pure symbolic systems are brittle. The best of both worlds requires principled integration.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">AI</div>
+                <div class="quarto-category">neurosymbolic</div>
+                <div class="quarto-category">reasoning</div>
+                <div class="quarto-category">theory</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Parsa Idehpour </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 17, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Modern AI has two dominant paradigms. <strong>Neural networks</strong> learn patterns from data—flexible, scalable, and powerful at perception and generation. <strong>Symbolic systems</strong> manipulate structured representations using explicit rules—interpretable, compositional, and exact. Each has characteristic strengths and weaknesses. This post explores why combining them might be essential for the next level of AI capability.</p>
+<section id="the-symbolic-ai-winter-and-neural-renaissance" class="level2">
+<h2 class="anchored" data-anchor-id="the-symbolic-ai-winter-and-neural-renaissance">The Symbolic AI Winter and Neural Renaissance</h2>
+<p>In the early decades of AI (1960s-1980s), symbolic approaches dominated. Researchers built expert systems, logical reasoners, and knowledge bases. The vision: encode human knowledge as rules and let machines derive conclusions.</p>
+<p>This worked… sort of. Expert systems could diagnose diseases and configure computers. But they were <strong>brittle</strong>: any situation not anticipated by the rules caused failure. And they faced the <strong>knowledge acquisition bottleneck</strong>: everything had to be manually encoded by experts.</p>
+<p>Neural networks and deep learning changed the equation. Instead of manually engineering features, let the model learn them. The result: breakthroughs in vision, speech, translation, and now general language understanding. Deep learning scales with data and compute in ways symbolic systems don’t.</p>
+<p>But neural networks have their own failure modes. And some of them look suspiciously like an inversion of symbolic limitations.</p>
+</section>
+<section id="failure-modes-of-pure-neural-systems" class="level2">
+<h2 class="anchored" data-anchor-id="failure-modes-of-pure-neural-systems">Failure Modes of Pure Neural Systems</h2>
+<p><strong>Hallucination</strong>: LLMs confidently generate false information. They complete patterns without grounding in truth. This is pattern matching without semantic verification.</p>
+<p><strong>Counting and simple arithmetic</strong>: “How many ‘r’s are in ’strawberry’?” is surprisingly hard for language models. Tokenization obscures character-level structure, and attention doesn’t implement algorithms cleanly.</p>
+<p><strong>Logical consistency</strong>: Given “A implies B” and “A”, a symbolc system derives “B” infallibly. Neural networks often fail at multi-step deduction, especially when reasoning chains are long or require maintaining many constraints.</p>
+<p><strong>Compositional generalization</strong>: Understanding “the cat sat on the mat” doesn’t guarantee understanding “the mat sat on the cat”. Neural networks often struggle with novel combinations of known components.</p>
+<p><strong>Systematic errors</strong>: The same input produces the same output. If a neural network has a blind spot, it’s reliably blind there. No self-correction mechanism exists.</p>
+<p>These failures aren’t random bugs—they’re systematic limitations of how neural networks represent and process information.</p>
+</section>
+<section id="failure-modes-of-pure-symbolic-systems" class="level2">
+<h2 class="anchored" data-anchor-id="failure-modes-of-pure-symbolic-systems">Failure Modes of Pure Symbolic Systems</h2>
+<p><strong>Brittleness</strong>: Symbolic systems work perfectly within their defined scope and fail completely outside it. They can’t gracefully handle noise, ambiguity, or novel inputs.</p>
+<p><strong>Knowledge acquisition bottleneck</strong>: Every fact, rule, and relationship must be manually specified. This doesn’t scale. The real world is too complex to enumerate.</p>
+<p><strong>Grounding</strong>: Symbols have meaning by convention. Connecting symbols to perception and action is a separate (unsolved) problem. A symbolic reasoner can manipulate “dog” without any sensory understanding of dogs.</p>
+<p><strong>Uncertainty</strong>: Classical logic is binary: true or false. The real world involves degrees of belief, noisy evidence, and probabilistic inference. Symbolic systems struggle with “probably” and “approximately.”</p>
+<p><strong>Scalability</strong>: Inference in expressive logical systems can be computationally intractable. As knowledge bases grow, reasoning becomes slow.</p>
+</section>
+<section id="integration-strategies" class="level2">
+<h2 class="anchored" data-anchor-id="integration-strategies">Integration Strategies</h2>
+<p>If neural and symbolic systems have complementary strengths, how do you combine them?</p>
+<section id="strategy-1-neural-perception-symbolic-reasoning" class="level3">
+<h3 class="anchored" data-anchor-id="strategy-1-neural-perception-symbolic-reasoning">Strategy 1: Neural Perception → Symbolic Reasoning</h3>
+<p>Use neural networks for perception (vision, language understanding), then hand off to symbolic systems for reasoning. The neural system grounds symbols; the symbolic system manipulates them logically.</p>
+<p>Example: A vision model identifies objects in a scene and their relationships. A logic engine then answers questions requiring multi-step inference.</p>
+<p>Limitation: Requires a clean handoff interface. Errors in the neural perception stage propagate.</p>
+</section>
+<section id="strategy-2-symbolic-scaffolding-for-neural-learning" class="level3">
+<h3 class="anchored" data-anchor-id="strategy-2-symbolic-scaffolding-for-neural-learning">Strategy 2: Symbolic Scaffolding for Neural Learning</h3>
+<p>Use symbolic structure to regularize neural learning. Prior knowledge becomes architectural bias or data augmentation.</p>
+<p>Example: Graph neural networks on knowledge graphs. The graph structure is symbolic; the embeddings and message passing are neural.</p>
+<p>Limitation: Requires available symbolic structure. Not always present.</p>
+</section>
+<section id="strategy-3-differentiable-reasoning" class="level3">
+<h3 class="anchored" data-anchor-id="strategy-3-differentiable-reasoning">Strategy 3: Differentiable Reasoning</h3>
+<p>Make symbolic operations differentiable so they can be part of end-to-end learning. Soft logic, differentiable program execution, neural theorem provers.</p>
+<p>Example: Neural Logic Machines that learn logical rules as soft functions trained by gradient descent.</p>
+<p>Limitation: Relaxing discrete logic to continuous approximations loses exactness. The resulting system may not be “truly” symbolic.</p>
+</section>
+</section>
+<section id="llms-as-orchestrators-tool-use" class="level2">
+<h2 class="anchored" data-anchor-id="llms-as-orchestrators-tool-use">LLMs as Orchestrators: Tool Use</h2>
+<p>Perhaps the most practical current approach: use LLMs to coordinate external tools, including symbolic ones.</p>
+<p><strong>Code interpreters</strong>: Give the LLM access to Python. When it needs to do arithmetic, write a program. This offloads exact computation to a reliable executor.</p>
+<p><strong>Databases and APIs</strong>: Query knowledge bases for factual information. The LLM plans the query; the database provides grounded answers.</p>
+<p><strong>Formal verifiers</strong>: Generate proof steps, check with a theorem prover. The neural system proposes; the symbolic system verifies.</p>
+<p><strong>Web search</strong>: Retrieve current information from external sources rather than hallucinating from training data.</p>
+<p>This pattern—LLM as controller, external tools as specialists—scales well. The LLM handles language, context, and orchestration. Tools handle domains where they’re reliable.</p>
+<p>It’s a loose form of neurosymbolic integration: the neural system delegates symbolic tasks to actual symbolic systems.</p>
+</section>
+<section id="probabilistic-programming-and-neuro-symbolic-probabilistic-models" class="level2">
+<h2 class="anchored" data-anchor-id="probabilistic-programming-and-neuro-symbolic-probabilistic-models">Probabilistic Programming and Neuro-Symbolic Probabilistic Models</h2>
+<p>Another integration approach: probabilistic programming languages that combine symbolic structure with probabilistic inference.</p>
+<p><strong>The idea</strong>: Write a generative model as a program. The program specifies symbolic structure (relationships, causality, types). Inference is probabilistic, handling uncertainty. Learning adapts parameters of the program from data.</p>
+<p><strong>Neuro-symbolic probabilistic programming</strong>: Use neural networks as likelihood functions within probabilistic programs. The symbolic program defines structure; neural components handle perception and pattern matching.</p>
+<p>Examples: Pyro, Turing, Stan are probabilistic programming languages. Projects like Neuro-Symbolic Program Synthesis combine them with neural learning.</p>
+<p>This is theoretically elegant but computationally expensive and difficult to scale. Active research is improving tractability.</p>
+</section>
+<section id="research-frontiers" class="level2">
+<h2 class="anchored" data-anchor-id="research-frontiers">Research Frontiers</h2>
+<p><strong>Neural theorem proving</strong>: Train neural networks to guide proof search in formal mathematics. The network proposes proof steps; the theorem prover verifies. Success in Lean, Coq, and other proof assistants.</p>
+<p><strong>Program synthesis</strong>: Generate programs that satisfy specifications (tests, formal specs, natural language descriptions). The neural system proposes candidate programs; symbolic checks verify correctness.</p>
+<p><strong>Concept learning</strong>: Learn symbolic concepts (rules, relations) from perceptual data. A child learns “above” from examples without being told the rule. Can neural systems extract symbolic structure?</p>
+<p><strong>Binding problem in neural networks</strong>: How do neural networks represent structured relationships? Attention mechanisms are one solution, but they don’t fully capture symbolic binding. This is an open theoretical question.</p>
+</section>
+<section id="why-this-might-matter-for-agi" class="level2">
+<h2 class="anchored" data-anchor-id="why-this-might-matter-for-agi">Why This Might Matter for AGI</h2>
+<p>The debate about how to reach more general AI often comes down to this question: is more scale sufficient, or are qualitatively new architectures needed?</p>
+<p><strong>Scaling optimists</strong> argue: LLMs are already showing emergent reasoning. More compute, more data, and better training might be enough. Symbolic behavior emerges from enough neural capacity.</p>
+<p><strong>Neurosymbolic advocates</strong> argue: Some capabilities require structural changes. Exact reasoning, systematic generalization, and reliable grounding may need architectural support that pure transformers don’t provide.</p>
+<p>The empirical resolution remains unclear. Current frontier models show impressive reasoning but also systematic failures. Whether these failures are “almost fixed by scale” or “fundamental” is an open question.</p>
+<p>My bet: some form of hybrid architecture will be necessary for robust general intelligence. The specific form it takes is yet to be discovered.</p>
+</section>
+<section id="practical-implications-now" class="level2">
+<h2 class="anchored" data-anchor-id="practical-implications-now">Practical Implications Now</h2>
+<p>If you’re building AI systems today:</p>
+<ol type="1">
+<li><p><strong>Use tools</strong>: Don’t rely on neural networks for domains where symbolic systems are reliable (math, databases, formal verification). Connect them.</p></li>
+<li><p><strong>Validate outputs</strong>: If exact correctness matters, add verification. Neural systems propose; external checks confirm.</p></li>
+<li><p><strong>Structured prompting</strong>: Chain-of-thought and similar techniques add symbolic-ish structure to neural generation. Use them.</p></li>
+<li><p><strong>Know the failure modes</strong>: Understand where your neural system will fail. Design around them.</p></li>
+<li><p><strong>Watch the research</strong>: Neurosymbolic integration is an active area. New approaches may become practical quickly.</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ParsaIdp\.github\.io\/comm4190_F25_Using_LLMs_Blog\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
