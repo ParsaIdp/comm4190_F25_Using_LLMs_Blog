@@ -2,30 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/about.html</loc>
-    <lastmod>2025-11-03T23:21:28.811Z</lastmod>
+    <lastmod>2025-12-17T01:11:44.352Z</lastmod>
   </url>
   <url>
     <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/002_information_theory_transformers/index.html</loc>
-    <lastmod>2025-11-03T23:21:28.823Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/004_tokenizers/index.html</loc>
-    <lastmod>2025-11-03T23:21:28.824Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/index.html</loc>
-    <lastmod>2025-11-03T23:21:28.812Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/000_test_post/index.html</loc>
-    <lastmod>2025-11-03T23:21:28.813Z</lastmod>
+    <lastmod>2025-12-17T01:11:44.364Z</lastmod>
   </url>
   <url>
     <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/001_tokenization_dna_models/index.html</loc>
-    <lastmod>2025-11-03T23:21:28.822Z</lastmod>
+    <lastmod>2025-12-17T01:11:44.363Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/000_test_post/index.html</loc>
+    <lastmod>2025-12-17T01:11:44.353Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/index.html</loc>
+    <lastmod>2025-12-17T01:11:44.352Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/004_tokenizers/index.html</loc>
+    <lastmod>2025-12-17T01:11:44.365Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/005_breakthrough1/index.html</loc>
+    <lastmod>2025-12-17T01:11:44.367Z</lastmod>
   </url>
   <url>
     <loc>https://ParsaIdp.github.io/comm4190_F25_Using_LLMs_Blog/posts/003_cuda_inference_kernels/index.html</loc>
-    <lastmod>2025-11-03T23:21:28.823Z</lastmod>
+    <lastmod>2025-12-17T01:11:44.364Z</lastmod>
   </url>
 </urlset>

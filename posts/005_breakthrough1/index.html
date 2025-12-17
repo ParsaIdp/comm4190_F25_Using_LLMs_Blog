@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Parsa Idehpour">
-<meta name="dcterms.date" content="2025-09-14">
-<meta name="description" content="Explaining transformer training through entropy, cross-entropy, and bits-per-token">
+<meta name="dcterms.date" content="2025-12-16">
+<meta name="description" content="My AI-focused notes on Bennett’s ‘steering’ breakthrough: valence, action selection, and why bilateral bodies made brains worth it.">
 
-<title>Information-Theoretic Bounds and Training Dynamics of Transformers – My Explorations with LLMs</title>
+<title>Breakthrough #1 — Steering: How the First Brains Solved Navigation – My Explorations with LLMs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,41 +22,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -153,16 +118,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Information-Theoretic Bounds and Training Dynamics of Transformers</h1>
+      <h1 class="title">Breakthrough #1 — Steering: How the First Brains Solved Navigation</h1>
                   <div>
         <div class="description">
-          Explaining transformer training through entropy, cross-entropy, and bits-per-token
+          My AI-focused notes on Bennett’s ‘steering’ breakthrough: valence, action selection, and why bilateral bodies made brains worth it.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">theory</div>
-                <div class="quarto-category">transformers</div>
-                <div class="quarto-category">information-theory</div>
+                <div class="quarto-category">neuroscience</div>
+                <div class="quarto-category">evolution</div>
+                <div class="quarto-category">reinforcement-learning</div>
+                <div class="quarto-category">control</div>
               </div>
                   </div>
   </div>
@@ -180,7 +146,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 14, 2025</p>
+        <p class="date">December 16, 2025</p>
       </div>
     </div>
     
@@ -199,57 +165,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>This post sketches how training a transformer can be framed in information-theoretic terms:</p>
-<ul>
-<li>Training minimizes empirical cross-entropy, i.e., expected negative log-likelihood.</li>
-<li>The optimal achievable loss is the entropy rate of the data (given the model class).</li>
-<li>Bits-per-token (bpt) is simply loss in base-2 units.</li>
-<li>Generalization can be discussed via compression and mutual information.</li>
-</ul>
+<p>Bennett’s first “breakthrough” is intentionally humble. He isn’t trying to start the history of intelligence with something that resembles human thought. He starts with the first situation where having a nervous system pays for itself: once an organism can move, it must solve a control problem in real time.</p>
+<p>That control problem has a very specific flavor. The organism is bombarded by noisy sensory streams. The world is patchy: food is not everywhere, danger is not everywhere. The organism has limited energy and limited time. So it needs a way to pick the next motor command that tends, on average, to move it toward beneficial states and away from harmful ones. That’s steering.</p>
+<p>What’s easy to miss is that “steering” is already more than a reflex. Reflexes are local and brittle: they fire when a trigger appears, they don’t reconcile conflicts, and they don’t stabilize behavior over time. Steering, as Bennett uses the term, is the first place you see two properties that later become hallmarks of intelligence:</p>
+<ol type="1">
+<li><p><strong>Integration.</strong> Multiple cues compete. Odor says “go,” pain says “stop,” heat says “leave,” social signal says “approach.” Steering is the machinery that merges these into one coherent directional push.</p></li>
+<li><p><strong>Commitment.</strong> If you change direction on every small fluctuation, you don’t get anywhere. Early nervous systems therefore need internal state—slow variables that persist and bias behavior for seconds to minutes. That’s how you get stable modes like exploration versus exploitation, approach versus avoidance, or “stay and forage” versus “get out now.”</p></li>
+</ol>
+<p>Bennett’s core claim is that the earliest brains build a tiny but powerful abstraction: <strong>valence</strong>. The world is carved into “good-for-me” and “bad-for-me” signals. That carving can be wired at the start (some stimuli are intrinsically appetitive or aversive), but it becomes conditional when internal state gets involved. The same cue can flip meaning depending on hunger, thirst, fatigue, or stress.</p>
+<p>This is the evolutionary origin of the objective function. Before you get learning, you get a stable notion of what counts as better versus worse. It sounds obvious, but it’s foundational: any agent-like system becomes interpretable only when you know what it’s trying to optimize. Bennett is saying: biology solved objective specification first, then built increasingly powerful machinery for optimizing it.</p>
+<p>A good way to see how strong steering can be is to picture an organism in a gradient (odor, temperature, salinity). If the signal gets better as it moves, keep going. If it gets worse, reorient. That kind of policy can look surprisingly purposeful because the environment itself is providing dense guidance. You don’t need a map if the world gives you “hotter/colder” feedback every second.</p>
+<p>There’s a deeper lesson here that generalizes beyond biology: a lot of competence comes from exploiting environmental structure, not from building elaborate internal representations. If the world offers smooth gradients, a small controller goes a long way. And if the world stops offering those gradients—if rewards become delayed, sparse, or deceptive—then the same controller hits a wall. Bennett’s whole staircase can be read as a sequence of upgrades that appear when the world becomes too hard for the previous controller class.</p>
+<p>From a math/ML viewpoint, I’d describe steering as a small, stable policy class coupled to a hard-coded reward prior. Early intelligence is not “general reasoning.” It’s the ability to turn sensory correlations into motion that improves survival. That’s why steering is such a good starting point: it forces you to take intelligence seriously as embodied control, not as disembodied problem-solving.</p>
+<p>If you want a pointed discussion question: what would count as the minimal internal state required to make steering robust? You can’t just say “approach good / avoid bad.” You need persistence, conflict resolution, and the ability to change what is “good” when the body’s needs change. That’s already the seed of later reinforcement learning.</p>
 <div style="text-align:center;">
-  <img src="entropy-27-00589-g001-550.jpg" alt="Information-theoretic view of training" width="60%">
-  <p><em>Figure 1. Transformers</em></p>
+  <img src="image.png" alt="Gradient following" width="65%">
+  <p><em>Figure 1. Gradient-following behavior as a minimal navigation strategy</em></p>
 </div>
-</section>
-<section id="cross-entropy-entropy-rate-and-bits-per-token" class="level2">
-<h2 class="anchored" data-anchor-id="cross-entropy-entropy-rate-and-bits-per-token">Cross-entropy, entropy rate, and bits-per-token</h2>
-<ul>
-<li>Cross-entropy (training loss) estimates how many nats per token the model spends to encode the data.</li>
-<li>Bits-per-token (bpt) is just loss in base-2: bpt = loss_nat / ln 2.</li>
-<li>The theoretical lower bound is the entropy rate H of the data-generating process; if the model class is misspecified, the optimum is H + D(P||Q*).</li>
-</ul>
-<div id="cell-4" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert loss (nats/token) to bits-per-token and perplexity</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Iterable, Tuple</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss_to_metrics(loss_nats: <span class="bu">float</span>) <span class="op">-&gt;</span> Tuple[<span class="bu">float</span>, <span class="bu">float</span>]:</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return (bits_per_token, perplexity) from loss in nats/token."""</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    bits_per_token <span class="op">=</span> loss_nats <span class="op">/</span> math.log(<span class="dv">2</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    perplexity <span class="op">=</span> math.exp(loss_nats)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bits_per_token, perplexity</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>example_losses <span class="op">=</span> [<span class="fl">3.5</span>, <span class="fl">2.8</span>, <span class="fl">2.2</span>, <span class="fl">1.9</span>]</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> step, loss <span class="kw">in</span> <span class="bu">enumerate</span>(example_losses, start<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    bpt, ppl <span class="op">=</span> loss_to_metrics(loss)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"step=</span><span class="sc">{</span>step<span class="sc">:02d}</span><span class="ss"> loss=</span><span class="sc">{</span>loss<span class="sc">:.3f}</span><span class="ss"> nats -&gt; bpt=</span><span class="sc">{</span>bpt<span class="sc">:.3f}</span><span class="ss">, ppl=</span><span class="sc">{</span>ppl<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="training-dynamics-as-compression" class="level2">
-<h2 class="anchored" data-anchor-id="training-dynamics-as-compression">Training dynamics as compression</h2>
-<ul>
-<li>Minimizing cross-entropy is equivalent to minimizing expected code length.</li>
-<li>Early training reduces redundant predictability (frequent patterns); later, model learns rarer structure.</li>
-<li>Capacity vs.&nbsp;data curve: more parameters lower achievable cross-entropy until compute/data bottlenecks.</li>
-<li>Generalization: MDL view—good models compress both train and test data with similar code lengths.</li>
-</ul>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
