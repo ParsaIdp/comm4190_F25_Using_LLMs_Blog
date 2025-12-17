@@ -1,5 +1,5 @@
 ---
-title: My Explorations with LLMs
+title: "Explorations in AI, Biology, and Computation"
 listing:
   contents: posts
   sort: date desc

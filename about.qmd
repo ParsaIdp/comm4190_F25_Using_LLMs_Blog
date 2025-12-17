@@ -1,8 +1,19 @@
 ---
-title: About
+title: "Parsa Idehpour"
 image: profile.jpg
 about:
   template: jolla
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/parsaidp
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/parsa-idehpour-8b0a8628a/
 ---
 
-About this blog
+I'm a researcher and engineer working at the intersection of AI, biology, and robotics. This blog is where I think through ideas—sometimes technical deep-dives into transformer architectures or diffusion models, sometimes broader explorations of how intelligence evolved or where it might be heading.
+
+My interests span the stack: from low-level inference optimization and CUDA kernels to high-level questions about alignment, consciousness, and the economic implications of increasingly capable AI systems. I'm particularly drawn to problems where biology and computation meet—protein folding, synthetic biology, embodied cognition.
+
+I write to understand. If any of these posts are useful to you, even better.
